@@ -8,9 +8,14 @@
       url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, nix-darwin, ... }@inputs:
+  outputs = { self, nixpkgs, nix-darwin, home-manager, ... }@inputs:
     let
       # デフォルトユーザー (nix-darwin用)
       defaultUser = "yoshiyoshifujii";
@@ -25,7 +30,10 @@
         "${defaultUser}-darwin" = nix-darwin.lib.darwinSystem {
           inherit system;
           modules = [
+            { _module.args.username = defaultUser; }
             ./darwin/default.nix
+            ./home/default.nix
+            home-manager.darwinModules.home-manager
           ];
         };
       };
