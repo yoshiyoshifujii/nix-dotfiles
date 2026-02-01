@@ -4,111 +4,15 @@
     pkgs.meslo-lgs-nf
   ];
 
-  xdg.configFile."wezterm/wezterm.lua".text = ''
-    local wezterm = require("wezterm")
-    local act = wezterm.action
-    return {
-      font_dirs = { "${pkgs.meslo-lgs-nf}/share/fonts/truetype" },
-      font = wezterm.font("MesloLGS NF", { weight = "Regular" }),
-      font_size = 13.0,
-      color_scheme = "3024 Night",
-      font_rasterizer = "FreeType",
-      freetype_load_target = "Normal",
-      freetype_render_target = "Normal",
-      window_background_opacity = 0.8,
-      leader = { key = "t", mods = "CTRL", timeout_milliseconds = 1000 },
-      keys = {
-        { key = "t", mods = "LEADER", action = act.SendKey({ key = "t", mods = "CTRL" }) },
-        { key = "-", mods = "LEADER", action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
-        { key = "%", mods = "LEADER|SHIFT", action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
-        { key = "_", mods = "LEADER|SHIFT", action = act.SplitVertical({ domain = "CurrentPaneDomain" }) },
-        { key = "|", mods = "LEADER|SHIFT", action = act.SplitVertical({ domain = "CurrentPaneDomain" }) },
-        { key = "h", mods = "LEADER", action = act.ActivatePaneDirection("Left") },
-        { key = "j", mods = "LEADER", action = act.ActivatePaneDirection("Down") },
-        { key = "k", mods = "LEADER", action = act.ActivatePaneDirection("Up") },
-        { key = "l", mods = "LEADER", action = act.ActivatePaneDirection("Right") },
-        { key = "+", mods = "LEADER", action = act.TogglePaneZoomState },
-        { key = "H", mods = "LEADER|SHIFT", action = act.AdjustPaneSize({ "Left", 2 }) },
-        { key = "J", mods = "LEADER|SHIFT", action = act.AdjustPaneSize({ "Down", 2 }) },
-        { key = "K", mods = "LEADER|SHIFT", action = act.AdjustPaneSize({ "Up", 2 }) },
-        { key = "L", mods = "LEADER|SHIFT", action = act.AdjustPaneSize({ "Right", 2 }) },
-        { key = "c", mods = "LEADER|CTRL", action = act.SpawnTab("CurrentPaneDomain") },
-        { key = "Tab", mods = "LEADER", action = act.ActivateLastTab },
-        { key = "h", mods = "LEADER|CTRL", action = act.ActivateTabRelative(-1) },
-        { key = "l", mods = "LEADER|CTRL", action = act.ActivateTabRelative(1) },
-        { key = "n", mods = "LEADER", action = act.ActivateTabRelative(1) },
-        { key = "n", mods = "LEADER|CTRL", action = act.ActivateTabRelative(1) },
-        { key = "Space", mods = "LEADER", action = act.ActivateTabRelative(1) },
-        { key = "Space", mods = "LEADER|CTRL", action = act.ActivateTabRelative(1) },
-        { key = "Backspace", mods = "LEADER", action = act.ActivateTabRelative(-1) },
-        { key = "Enter", mods = "LEADER", action = act.ActivateCopyMode },
-      },
-      key_tables = {
-        copy_mode = {
-          { key = "Tab", mods = "NONE", action = act.CopyMode("MoveForwardWord") },
-          { key = "Tab", mods = "SHIFT", action = act.CopyMode("MoveBackwardWord") },
-          { key = "Enter", mods = "NONE", action = act.CopyMode("MoveToStartOfNextLine") },
-          { key = "Escape", mods = "NONE", action = act.CopyMode("Close") },
-          { key = "Space", mods = "NONE", action = act.CopyMode({ SetSelectionMode = "Cell" }) },
-          { key = "$", mods = "NONE", action = act.CopyMode("MoveToEndOfLineContent") },
-          { key = "$", mods = "SHIFT", action = act.CopyMode("MoveToEndOfLineContent") },
-          { key = ",", mods = "NONE", action = act.CopyMode("JumpReverse") },
-          { key = "0", mods = "NONE", action = act.CopyMode("MoveToStartOfLine") },
-          { key = ";", mods = "NONE", action = act.CopyMode("JumpAgain") },
-          { key = "F", mods = "NONE", action = act.CopyMode({ JumpBackward = { prev_char = false } }) },
-          { key = "F", mods = "SHIFT", action = act.CopyMode({ JumpBackward = { prev_char = false } }) },
-          { key = "G", mods = "NONE", action = act.CopyMode("MoveToScrollbackBottom") },
-          { key = "G", mods = "SHIFT", action = act.CopyMode("MoveToScrollbackBottom") },
-          { key = "H", mods = "NONE", action = act.CopyMode("MoveToStartOfLine") },
-          { key = "H", mods = "SHIFT", action = act.CopyMode("MoveToStartOfLine") },
-          { key = "L", mods = "NONE", action = act.CopyMode("MoveToEndOfLineContent") },
-          { key = "L", mods = "SHIFT", action = act.CopyMode("MoveToEndOfLineContent") },
-          { key = "M", mods = "NONE", action = act.CopyMode("MoveToViewportMiddle") },
-          { key = "M", mods = "SHIFT", action = act.CopyMode("MoveToViewportMiddle") },
-          { key = "O", mods = "NONE", action = act.CopyMode("MoveToSelectionOtherEndHoriz") },
-          { key = "O", mods = "SHIFT", action = act.CopyMode("MoveToSelectionOtherEndHoriz") },
-          { key = "T", mods = "NONE", action = act.CopyMode({ JumpBackward = { prev_char = true } }) },
-          { key = "T", mods = "SHIFT", action = act.CopyMode({ JumpBackward = { prev_char = true } }) },
-          { key = "V", mods = "NONE", action = act.CopyMode({ SetSelectionMode = "Line" }) },
-          { key = "V", mods = "SHIFT", action = act.CopyMode({ SetSelectionMode = "Line" }) },
-          { key = "^", mods = "NONE", action = act.CopyMode("MoveToStartOfLineContent") },
-          { key = "^", mods = "SHIFT", action = act.CopyMode("MoveToStartOfLineContent") },
-          { key = "b", mods = "NONE", action = act.CopyMode("MoveBackwardWord") },
-          { key = "b", mods = "ALT", action = act.CopyMode("MoveBackwardWord") },
-          { key = "b", mods = "CTRL", action = act.CopyMode("PageUp") },
-          { key = "c", mods = "CTRL", action = act.CopyMode("Close") },
-          { key = "d", mods = "CTRL", action = act.CopyMode({ MoveByPage = 0.5 }) },
-          { key = "e", mods = "NONE", action = act.CopyMode("MoveForwardWordEnd") },
-          { key = "f", mods = "NONE", action = act.CopyMode({ JumpForward = { prev_char = false } }) },
-          { key = "f", mods = "ALT", action = act.CopyMode("MoveForwardWord") },
-          { key = "f", mods = "CTRL", action = act.CopyMode("PageDown") },
-          { key = "g", mods = "NONE", action = act.CopyMode("MoveToScrollbackTop") },
-          { key = "g", mods = "CTRL", action = act.CopyMode("Close") },
-          { key = "h", mods = "NONE", action = act.CopyMode("MoveLeft") },
-          { key = "j", mods = "NONE", action = act.CopyMode("MoveDown") },
-          { key = "k", mods = "NONE", action = act.CopyMode("MoveUp") },
-          { key = "l", mods = "NONE", action = act.CopyMode("MoveRight") },
-          { key = "m", mods = "ALT", action = act.CopyMode("MoveToStartOfLineContent") },
-          { key = "o", mods = "NONE", action = act.CopyMode("MoveToSelectionOtherEnd") },
-          { key = "q", mods = "NONE", action = act.CopyMode("Close") },
-          { key = "t", mods = "NONE", action = act.CopyMode({ JumpForward = { prev_char = true } }) },
-          { key = "u", mods = "CTRL", action = act.CopyMode({ MoveByPage = -0.5 }) },
-          { key = "v", mods = "NONE", action = act.CopyMode({ SetSelectionMode = "Cell" }) },
-          { key = "v", mods = "CTRL", action = act.CopyMode({ SetSelectionMode = "Block" }) },
-          { key = "w", mods = "NONE", action = act.CopyMode("MoveForwardWord") },
-          { key = "y", mods = "NONE", action = act.Multiple({ { CopyTo = "Clipboard" }, { CopyMode = "Close" } }) },
-          { key = "PageUp", mods = "NONE", action = act.CopyMode("PageUp") },
-          { key = "PageDown", mods = "NONE", action = act.CopyMode("PageDown") },
-          { key = "End", mods = "NONE", action = act.CopyMode("MoveToEndOfLineContent") },
-          { key = "Home", mods = "NONE", action = act.CopyMode("MoveToStartOfLine") },
-          { key = "LeftArrow", mods = "NONE", action = act.CopyMode("MoveLeft") },
-          { key = "LeftArrow", mods = "ALT", action = act.CopyMode("MoveBackwardWord") },
-          { key = "RightArrow", mods = "NONE", action = act.CopyMode("MoveRight") },
-          { key = "RightArrow", mods = "ALT", action = act.CopyMode("MoveForwardWord") },
-          { key = "UpArrow", mods = "NONE", action = act.CopyMode("MoveUp") },
-          { key = "DownArrow", mods = "NONE", action = act.CopyMode("MoveDown") },
-        },
-      },
-    }
-  '';
+  xdg.configFile."wezterm/wezterm.lua".text =
+    builtins.readFile ./wezterm/wezterm.lua;
+
+  xdg.configFile."wezterm/appearance.lua".text =
+    pkgs.lib.replaceStrings
+      [ "@MESLO_FONT_DIR@" ]
+      [ "${pkgs.meslo-lgs-nf}/share/fonts/truetype" ]
+      (builtins.readFile ./wezterm/appearance.lua);
+
+  xdg.configFile."wezterm/tmux.lua".text =
+    builtins.readFile ./wezterm/tmux.lua;
 }
