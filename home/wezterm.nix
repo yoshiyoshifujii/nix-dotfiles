@@ -2,6 +2,7 @@
 {
   home.packages = [
     pkgs.meslo-lgs-nf
+    pkgs.nerd-fonts.jetbrains-mono
   ];
 
   xdg.configFile."wezterm/wezterm.lua".text =

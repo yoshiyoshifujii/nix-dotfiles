@@ -51,7 +51,14 @@ M.font_size = 13.0
 
 function M.apply(config)
   config.font_dirs = { "@MESLO_FONT_DIR@" }
-  config.font = wezterm.font("MesloLGS NF", { weight = "Regular" })
+  config.font = wezterm.font_with_fallback({
+    "JetBrainsMono Nerd Font",
+    "JetBrains Mono",
+    "Hiragino Sans",
+    "YuGothic",
+    "BIZ UDGothic",
+    "Symbols Nerd Font Mono",
+  })
   config.font_size = M.font_size
   config.color_scheme = M.color_scheme
   config.colors = M.colors
