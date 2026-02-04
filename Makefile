@@ -4,8 +4,9 @@
 
 .DEFAULT_GOAL := help
 
-# ユーザー名 (現在のログインユーザーを自動検出)
-USER := $(shell whoami)
+# ユーザー名 (環境変数が設定されていればそれを優先、なければ自動検出)
+DARWIN_USER ?= $(shell whoami)
+export DARWIN_USER
 
 # システム検出
 UNAME := $(shell uname)
@@ -13,11 +14,14 @@ ARCH := $(shell uname -m)
 
 ifeq ($(UNAME),Darwin)
   ifeq ($(ARCH),arm64)
-    DARWIN_CONFIG := $(USER)-darwin
+    DARWIN_CONFIG := $(DARWIN_USER)-darwin
   else
-    DARWIN_CONFIG := $(USER)-darwin-x86
+    DARWIN_CONFIG := $(DARWIN_USER)-darwin-x86
   endif
 endif
+
+# Nix コマンドのパス (sudo環境でも使えるようにフルパス指定)
+NIX := /nix/var/nix/profiles/default/bin/nix
 
 # Nix experimental features (flakes + nix-command)
 NIX_EXPERIMENTAL_FEATURES ?= nix-command flakes
@@ -51,7 +55,7 @@ help:
 build:
 ifeq ($(UNAME),Darwin)
 	@echo "Building nix-darwin configuration: $(DARWIN_CONFIG)"
-	nix build --impure .#darwinConfigurations.$(DARWIN_CONFIG).system
+	$(NIX) build --impure .#darwinConfigurations.$(DARWIN_CONFIG).system
 else
 	@echo "nix-darwin is only available on macOS"
 	@exit 1
@@ -68,7 +72,7 @@ clean:
 apply-darwin:
 ifeq ($(UNAME),Darwin)
 	@echo "Applying nix-darwin configuration: $(DARWIN_CONFIG)"
-	sudo -E nix run nix-darwin#darwin-rebuild -- switch --flake .#$(DARWIN_CONFIG) --impure
+	sudo -E $(NIX) run nix-darwin#darwin-rebuild -- switch --flake .#$(DARWIN_CONFIG) --impure
 else
 	@echo "nix-darwin is only available on macOS"
 	@exit 1
@@ -85,7 +89,7 @@ ifeq ($(UNAME),Darwin)
 	@[ -f /etc/bashrc.before-nix-darwin ] || sudo mv /etc/bashrc /etc/bashrc.before-nix-darwin 2>/dev/null || true
 	@[ -f /etc/zshrc.before-nix-darwin ] || sudo mv /etc/zshrc /etc/zshrc.before-nix-darwin 2>/dev/null || true
 	@echo "Running initial nix-darwin switch..."
-	sudo -E nix run nix-darwin#darwin-rebuild -- switch --flake .#$(DARWIN_CONFIG) --impure
+	sudo -E $(NIX) run nix-darwin#darwin-rebuild -- switch --flake .#$(DARWIN_CONFIG) --impure
 else
 	@echo "nix-darwin is only available on macOS"
 	@exit 1

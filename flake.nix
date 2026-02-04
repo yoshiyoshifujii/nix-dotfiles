@@ -18,7 +18,12 @@
   outputs = { self, nixpkgs, nix-darwin, home-manager, ... }@inputs:
     let
       # デフォルトユーザー (nix-darwin用)
-      defaultUser = "yoshiyoshifujii";
+      # 環境変数 DARWIN_USER が必須。設定されていない場合はエラー
+      defaultUser =
+        let envUser = builtins.getEnv "DARWIN_USER";
+        in if envUser != ""
+           then envUser
+           else builtins.throw "DARWIN_USER environment variable is not set. Please run via Makefile or set DARWIN_USER manually.";
 
       # macOS (Apple Silicon)
       system = "aarch64-darwin";
