@@ -28,6 +28,10 @@ export NIX_CONFIG
 NIXBLD_GID := $(shell dscl . -read /Groups/nixbld PrimaryGroupID 2>/dev/null | awk '{print $$2}')
 export NIXBLD_GID
 
+MISE_DATA_DIR ?= $(HOME)/.local/share/mise
+MISE_STATE_DIR ?= $(HOME)/.local/state/mise
+MISE_CACHE_DIR ?= $(HOME)/Library/Caches/mise
+
 help:
 	@echo "Usage: make <target>"
 	@echo ""
@@ -36,6 +40,9 @@ help:
 	@echo "  init    Initial nix-darwin setup (macOS only)"
 	@echo "  apply   Apply nix-darwin configuration"
 	@echo "  build   Build nix-darwin configuration"
+	@echo "  clean   Remove local build artifacts"
+	@echo "  mise/install  Install tools defined by mise config"
+	@echo "  mise/purge    Remove mise installed tools and cache"
 
 # ============================================================
 # Build
@@ -49,6 +56,10 @@ else
 	@echo "nix-darwin is only available on macOS"
 	@exit 1
 endif
+
+clean:
+	@echo "Removing local build artifacts..."
+	rm -f result
 
 # ============================================================
 # Apply
@@ -82,3 +93,25 @@ endif
 
 init:
 	$(MAKE) init-darwin
+
+# ============================================================
+# mise
+# ============================================================
+
+mise/install:
+ifeq ($(UNAME),Darwin)
+	@echo "Installing tools from mise config..."
+	mise install
+else
+	@echo "mise targets are intended for macOS in this repository"
+	@exit 1
+endif
+
+mise/purge:
+ifeq ($(UNAME),Darwin)
+	@echo "Purging mise data, state, and cache..."
+	rm -rf "$(MISE_DATA_DIR)" "$(MISE_STATE_DIR)" "$(MISE_CACHE_DIR)"
+else
+	@echo "mise targets are intended for macOS in this repository"
+	@exit 1
+endif

@@ -60,6 +60,13 @@ Apply the configuration:
 make apply
 ```
 
+適用後は新しいシェルセッションを開いて、次を実行してください:
+
+```bash
+make mise/install
+java -version
+```
+
 Build only:
 
 ```bash
@@ -81,3 +88,6 @@ make help
 | `init` | Initial nix-darwin setup (macOS only) |
 | `apply` | Apply nix-darwin configuration |
 | `build` | Build nix-darwin configuration |
+| `clean` | Remove local build artifacts (`result`) |
+| `mise/install` | Install tools defined in mise config |
+| `mise/purge` | Remove mise installed tools and cache |
