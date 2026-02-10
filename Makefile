@@ -41,8 +41,8 @@ help:
 	@echo "  apply   Apply nix-darwin configuration"
 	@echo "  build   Build nix-darwin configuration"
 	@echo "  clean   Remove local build artifacts"
-	@echo "  mise/install  Install tools defined by mise config"
-	@echo "  mise/purge    Remove mise installed tools and cache"
+	@echo "  mise-install  Install tools defined by mise config"
+	@echo "  mise-purge    Remove mise installed tools and cache"
 
 # ============================================================
 # Build
@@ -98,7 +98,7 @@ init:
 # mise
 # ============================================================
 
-mise/install:
+mise-install:
 ifeq ($(UNAME),Darwin)
 	@echo "Installing tools from mise config..."
 	mise install
@@ -107,7 +107,7 @@ else
 	@exit 1
 endif
 
-mise/purge:
+mise-purge:
 ifeq ($(UNAME),Darwin)
 	@echo "Purging mise data, state, and cache..."
 	rm -rf "$(MISE_DATA_DIR)" "$(MISE_STATE_DIR)" "$(MISE_CACHE_DIR)"

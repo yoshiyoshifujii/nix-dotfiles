@@ -63,7 +63,7 @@ make apply
 適用後は新しいシェルセッションを開いて、次を実行してください:
 
 ```bash
-make mise/install
+make mise-install
 java -version
 ```
 
@@ -71,6 +71,20 @@ Build only:
 
 ```bash
 make build
+```
+
+## Security Check (pre-commit + gitleaks)
+
+Install and enable:
+
+```bash
+nix shell nixpkgs#pre-commit -c pre-commit install
+```
+
+Run manually:
+
+```bash
+nix shell nixpkgs#pre-commit -c pre-commit run --all-files
 ```
 
 Note: This setup reads `NIXBLD_GID` from the environment to align nix-darwin
@@ -89,5 +103,5 @@ make help
 | `apply` | Apply nix-darwin configuration |
 | `build` | Build nix-darwin configuration |
 | `clean` | Remove local build artifacts (`result`) |
-| `mise/install` | Install tools defined in mise config |
-| `mise/purge` | Remove mise installed tools and cache |
+| `mise-install` | Install tools defined in mise config |
+| `mise-purge` | Remove mise installed tools and cache |
