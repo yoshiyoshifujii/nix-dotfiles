@@ -13,15 +13,8 @@
       home.file = {
         ".zshenv".source = ./files/zshenv;
         ".zprofile".source = ./files/zprofile;
-        # .zshrc は home/zsh.nix で programs.zsh により自動生成される
-        ".oh-my-zsh-custom/plugins/origin" = {
-          source = ./files/oh-my-zsh/custom/plugins/origin;
-          recursive = true;
-        };
-        ".oh-my-zsh-custom/plugins/zsh-history-beginning-search" = {
-          source = ./files/oh-my-zsh/custom/plugins/zsh-history-beginning-search;
-          recursive = true;
-        };
+        ".p10k.zsh".source = ./files/p10k.zsh;
+        # .zshrc と oh-my-zsh 関連は home/zsh.nix で管理
       };
 
       xdg.configFile = {
@@ -33,6 +26,7 @@
         ./ghostty.nix
         ./wezterm.nix
         ./zsh.nix
+        ./oh-my-zsh.nix
       ];
     };
   };

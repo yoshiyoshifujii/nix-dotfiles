@@ -6,27 +6,6 @@
   programs.zsh = {
     enable = true;
 
-    # oh-my-zsh 設定
-    oh-my-zsh = {
-      enable = true;
-      custom = "$HOME/.oh-my-zsh-custom";
-      theme = "powerlevel10k/powerlevel10k";
-      plugins = [
-        "aws"
-        "docker"
-        "docker-compose"
-        "git"
-        "github"
-        "golang"
-        "kubectl"
-        "macos"
-        "themes"
-        "vi-mode"
-        "fast-syntax-highlighting"
-        "zsh-history-beginning-search"
-      ];
-    };
-
     # Additional configuration
     initContent = lib.mkMerge [
       # Powerlevel10k instant prompt (must be at the top)
@@ -44,8 +23,8 @@
         # mise activation
         eval "$(mise activate zsh)"
 
-        # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-        [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+        # To customize prompt, run `p10k configure` or edit home/files/p10k.zsh
+        source ~/.p10k.zsh
       ''
     ];
 
@@ -53,25 +32,6 @@
     sessionVariables = {
       EDITOR = "vim";
       VISUAL = "vim";
-      # oh-my-zsh のキャッシュディレクトリを XDG Base Directory に準拠
-      ZSH_CACHE_DIR = "$HOME/.cache/oh-my-zsh";
     };
-  };
-
-  # powerlevel10k と fast-syntax-highlighting をインストール
-  home.packages = with pkgs; [
-    zsh-powerlevel10k
-    zsh-fast-syntax-highlighting
-  ];
-
-  home.file = {
-    # custom ディレクトリを ~/.oh-my-zsh-custom に配置
-    # powerlevel10k を custom/themes にリンク
-    ".oh-my-zsh-custom/themes/powerlevel10k".source =
-      "${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k";
-
-    # fast-syntax-highlighting を custom/plugins にリンク
-    ".oh-my-zsh-custom/plugins/fast-syntax-highlighting".source =
-      "${pkgs.zsh-fast-syntax-highlighting}/share/zsh/plugins/fast-syntax-highlighting";
   };
 }
