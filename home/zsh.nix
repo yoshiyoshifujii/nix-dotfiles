@@ -1,11 +1,60 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 {
   # ============================================================
   # Zsh 設定 (Home Manager)
   # ============================================================
-  # .zshrc は home/files/zshrc で手動管理するため、
-  # programs.zsh.oh-my-zsh は使用しない
-  # （CLAUDE.md の方針: Shell files are managed as plain files）
+  programs.zsh = {
+    enable = true;
+
+    # oh-my-zsh 設定
+    oh-my-zsh = {
+      enable = true;
+      custom = "$HOME/.oh-my-zsh-custom";
+      theme = "powerlevel10k/powerlevel10k";
+      plugins = [
+        "aws"
+        "docker"
+        "docker-compose"
+        "git"
+        "github"
+        "golang"
+        "kubectl"
+        "macos"
+        "themes"
+        "vi-mode"
+        "fast-syntax-highlighting"
+        "zsh-history-beginning-search"
+      ];
+    };
+
+    # Additional configuration
+    initContent = lib.mkMerge [
+      # Powerlevel10k instant prompt (must be at the top)
+      (lib.mkBefore ''
+        # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+        # Initialization code that may require console input (password prompts, [y/n]
+        # confirmations, etc.) must go above this block; everything else may go below.
+        if [[ -r "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
+          source "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh"
+        fi
+      '')
+
+      # Additional configuration (after oh-my-zsh initialization)
+      ''
+        # mise activation
+        eval "$(mise activate zsh)"
+
+        # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+        [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+      ''
+    ];
+
+    # Environment variables
+    sessionVariables = {
+      EDITOR = "vim";
+      VISUAL = "vim";
+    };
+  };
 
   # powerlevel10k と fast-syntax-highlighting をインストール
   home.packages = with pkgs; [
@@ -14,18 +63,13 @@
   ];
 
   home.file = {
-    # oh-my-zsh 本体を Nix で管理
-    ".oh-my-zsh" = {
-      source = "${pkgs.oh-my-zsh}/share/oh-my-zsh";
-      recursive = true;
-    };
-
-    # powerlevel10k を oh-my-zsh の custom/themes にリンク
-    ".oh-my-zsh/custom/themes/powerlevel10k".source =
+    # custom ディレクトリを ~/.oh-my-zsh-custom に配置
+    # powerlevel10k を custom/themes にリンク
+    ".oh-my-zsh-custom/themes/powerlevel10k".source =
       "${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k";
 
-    # fast-syntax-highlighting を oh-my-zsh の custom/plugins にリンク
-    ".oh-my-zsh/custom/plugins/fast-syntax-highlighting".source =
+    # fast-syntax-highlighting を custom/plugins にリンク
+    ".oh-my-zsh-custom/plugins/fast-syntax-highlighting".source =
       "${pkgs.zsh-fast-syntax-highlighting}/share/zsh/plugins/fast-syntax-highlighting";
   };
 }

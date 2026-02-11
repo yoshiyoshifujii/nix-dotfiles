@@ -59,7 +59,8 @@ Simply opening a new tmux window (LEADER+c) does NOT reload the environment.
 flake.nix (entry point)
 ├── darwin/default.nix (system-level: packages, Homebrew, system settings)
 └── home/default.nix (user-level: dotfiles via Home Manager)
-    ├── home/files/* (shell configs: zshenv, zprofile, zshrc, etc.)
+    ├── home/files/* (zshenv, zprofile, mise configs, custom oh-my-zsh plugins)
+    ├── home/zsh.nix (zsh and oh-my-zsh configuration)
     ├── home/ghostty.nix (ghostty terminal config)
     └── home/wezterm.nix (wezterm terminal config)
 ```
@@ -75,7 +76,11 @@ flake.nix (entry point)
    - **GUI applications** (ghostty): Managed by Homebrew Cask in `darwin/default.nix`
    - **Development tools** (Java, Python, Node, Rust, Maven, Gradle, etc.): Managed by mise via `home/files/mise/config.toml`
 
-4. **Shell Configuration**: Shell files are managed as plain files in `home/files/` and symlinked to the home directory by Home Manager. This approach is used instead of Nix-generated configs to maintain compatibility with oh-my-zsh and other shell tools.
+4. **Shell Configuration**:
+   - **zsh and oh-my-zsh**: Managed declaratively via Home Manager's `programs.zsh` module in `home/zsh.nix`
+   - **zshenv and zprofile**: Managed as plain files in `home/files/` for environment variable setup
+   - **oh-my-zsh custom plugins**: User-defined plugins in `home/files/oh-my-zsh/custom/plugins/` are symlinked to `~/.oh-my-zsh-custom/plugins/`
+   - This hybrid approach allows declarative management of core configuration while maintaining flexibility for custom plugins
 
 5. **Backup Strategy**: `backupFileExtension = "backup"` in `home/default.nix` ensures existing dotfiles are backed up with a `.backup` extension when Home Manager takes over management.
 
@@ -124,7 +129,14 @@ homebrew = {
 
 ### Modifying Shell Configuration
 
-1. Edit files in `home/files/` (zshrc, zshenv, zprofile, etc.)
+**Zsh configuration (plugins, theme, etc.)**:
+1. Edit `home/zsh.nix` to modify zsh settings declaratively
+2. Stage changes: `git add home/zsh.nix`
+3. Apply: `make apply`
+4. Restart shell/tmux
+
+**Environment variables (zshenv, zprofile)**:
+1. Edit files in `home/files/` (zshenv, zprofile)
 2. Stage changes: `git add home/files/filename`
 3. Apply: `make apply`
 4. Restart shell/tmux
