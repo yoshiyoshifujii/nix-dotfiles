@@ -17,6 +17,7 @@
       };
 
       imports = [
+        ./fonts.nix
         ./ghostty.nix
         ./wezterm.nix
         ./zsh.nix
