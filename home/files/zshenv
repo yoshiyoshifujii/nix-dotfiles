@@ -3,7 +3,9 @@ if [ -f /etc/profiles/per-user/$USER/etc/profile.d/hm-session-vars.sh ]; then
 fi
 
 # PATH settings
-export PATH="$HOME/Library/Application Support/JetBrains/Toolbox/scripts:$PATH"
+if [ -d "$HOME/Library/Application Support/JetBrains/Toolbox/scripts" ]; then
+  export PATH="$HOME/Library/Application Support/JetBrains/Toolbox/scripts:$PATH"
+fi
 
 if [ -f "$HOME/.config/zsh/mise.zsh" ]; then
   . "$HOME/.config/zsh/mise.zsh"
