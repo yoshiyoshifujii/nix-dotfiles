@@ -3,6 +3,7 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
+    backupFileExtension = "backup";
     users.${username} = { ... }: {
       home.username = username;
       home.stateVersion = "24.05";
@@ -11,6 +12,7 @@
       };
       home.file = {
         ".zshenv".source = ./files/zshenv;
+        ".zprofile".source = ./files/zprofile;
         ".zshrc".source = ./files/zshrc;
         ".oh-my-zsh/custom/plugins/origin" = {
           source = ./files/oh-my-zsh/custom/plugins/origin;

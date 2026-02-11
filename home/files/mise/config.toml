@@ -2,3 +2,7 @@
 java = "temurin-21"
 maven = "latest"
 gradle = "latest"
+rust = "latest"
+python = "latest"
+node = "latest"
+go = "latest"
