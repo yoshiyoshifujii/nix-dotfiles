@@ -59,11 +59,12 @@ Simply opening a new tmux window (LEADER+c) does NOT reload the environment.
 flake.nix (entry point)
 ├── darwin/default.nix (system-level: packages, Homebrew, system settings)
 └── home/default.nix (user-level: dotfiles via Home Manager)
-    ├── home/files/* (zshenv, zprofile, p10k.zsh, mise/config.toml, custom oh-my-zsh plugins, wezterm configs)
+    ├── home/files/* (zshenv, zprofile, p10k.zsh, mise/config.toml, tmux.conf.local, custom oh-my-zsh plugins, wezterm configs)
     ├── home/fonts.nix (fonts: powerline-fonts, nerd-fonts)
     ├── home/zsh.nix (zsh configuration)
     ├── home/oh-my-zsh.nix (oh-my-zsh, plugins, themes)
     ├── home/mise.nix (mise development tool version management)
+    ├── home/tmux.nix (tmux configuration using gpakosz/.tmux)
     ├── home/ghostty.nix (ghostty terminal config)
     └── home/wezterm.nix (wezterm terminal config)
 ```
@@ -75,7 +76,7 @@ flake.nix (entry point)
 2. **Impure Builds**: All builds use `--impure` flag because they read environment variables to align with existing system configuration.
 
 3. **Tool Management Split**:
-   - **System packages** (git, mise, wezterm): Managed by nix-darwin in `darwin/default.nix`
+   - **System packages** (git, mise, tmux, wezterm): Managed by nix-darwin in `darwin/default.nix`
    - **GUI applications** (ghostty): Managed by Homebrew Cask in `darwin/default.nix`
    - **Development tools** (Java, Python, Node, Rust, Maven, Gradle, etc.): Managed by mise via `home/files/mise/config.toml`
 
@@ -159,6 +160,28 @@ homebrew = {
 1. Edit `home/files/mise/config.toml` to add/update tool versions
 2. Stage and apply: `git add home/files/mise/config.toml && make apply`
 3. Install tools: `make mise-install`
+
+### Modifying tmux Configuration
+
+**tmux configuration** is managed using [gpakosz/.tmux](https://github.com/gpakosz/.tmux):
+
+1. **Update base configuration** (gpakosz/.tmux version):
+   - Edit `home/tmux.nix` to update `rev` and `sha256`
+   - Use `nix-shell -p nix-prefetch-github --run 'nix-prefetch-github gpakosz .tmux'` to get the latest hash
+   - Stage and apply: `git add home/tmux.nix && make apply`
+
+2. **Customize settings** (prefix key, key bindings, theme):
+   - Edit `home/files/tmux.conf.local` for customizations
+   - **NEVER edit** `.tmux.conf` directly (managed by gpakosz/.tmux)
+   - Stage and apply: `git add home/files/tmux.conf.local && make apply`
+   - Restart tmux: `tmux kill-server && tmux`
+
+3. **Key bindings in current config**:
+   - Prefix key: `Ctrl-t` (customized from default `Ctrl-b`)
+   - Split horizontal: `Ctrl-t` → `|`
+   - Next window: `Ctrl-t` → `n` or `Space`
+   - Previous window: `Ctrl-t` → `Backspace`
+   - Copy mode: `Ctrl-t` → `[` (Vi mode enabled)
 
 ### Adding New Dotfiles
 
