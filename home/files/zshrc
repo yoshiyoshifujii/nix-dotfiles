@@ -88,8 +88,6 @@ plugins=(
     vi-mode
     fast-syntax-highlighting
     zsh-history-beginning-search
-    origin
-    rust
 )
 
 source $ZSH/oh-my-zsh.sh
