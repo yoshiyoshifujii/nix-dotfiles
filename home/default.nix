@@ -16,15 +16,12 @@
         ".p10k.zsh".source = ./files/p10k.zsh;
       };
 
-      xdg.configFile = {
-        "mise/config.toml".source = ./files/mise/config.toml;
-      };
-
       imports = [
         ./ghostty.nix
         ./wezterm.nix
         ./zsh.nix
         ./oh-my-zsh.nix
+        ./mise.nix
       ];
     };
   };

@@ -59,9 +59,10 @@ Simply opening a new tmux window (LEADER+c) does NOT reload the environment.
 flake.nix (entry point)
 ├── darwin/default.nix (system-level: packages, Homebrew, system settings)
 └── home/default.nix (user-level: dotfiles via Home Manager)
-    ├── home/files/* (zshenv, zprofile, p10k.zsh, mise configs, custom oh-my-zsh plugins)
+    ├── home/files/* (zshenv, zprofile, p10k.zsh, mise/config.toml, custom oh-my-zsh plugins)
     ├── home/zsh.nix (zsh configuration)
     ├── home/oh-my-zsh.nix (oh-my-zsh, plugins, themes)
+    ├── home/mise.nix (mise development tool version management)
     ├── home/ghostty.nix (ghostty terminal config)
     └── home/wezterm.nix (wezterm terminal config)
 ```
@@ -152,6 +153,11 @@ homebrew = {
 1. Run `p10k configure` to generate new configuration
 2. Copy to repository: `cp ~/.p10k.zsh home/files/p10k.zsh`
 3. Stage and apply: `git add home/files/p10k.zsh && make apply`
+
+**mise tool versions**:
+1. Edit `home/files/mise/config.toml` to add/update tool versions
+2. Stage and apply: `git add home/files/mise/config.toml && make apply`
+3. Install tools: `make mise-install`
 
 ### Adding New Dotfiles
 

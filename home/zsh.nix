@@ -20,9 +20,6 @@
 
       # Additional configuration (after oh-my-zsh initialization)
       ''
-        # mise activation
-        eval "$(mise activate zsh)"
-
         # To customize prompt, run `p10k configure` or edit home/files/p10k.zsh
         source ~/.p10k.zsh
       ''
