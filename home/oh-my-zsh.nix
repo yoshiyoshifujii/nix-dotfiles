@@ -48,10 +48,6 @@
       "${pkgs.zsh-fast-syntax-highlighting}/share/zsh/plugins/fast-syntax-highlighting";
 
     # ユーザー定義のカスタムプラグイン
-    ".oh-my-zsh-custom/plugins/origin" = {
-      source = ./files/oh-my-zsh/custom/plugins/origin;
-      recursive = true;
-    };
     ".oh-my-zsh-custom/plugins/zsh-history-beginning-search" = {
       source = ./files/oh-my-zsh/custom/plugins/zsh-history-beginning-search;
       recursive = true;
