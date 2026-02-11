@@ -36,9 +36,44 @@ in
     # gpakosz/.tmux の .tmux.conf をシンボリックリンク
     ".tmux.conf".source = "${gpakoszTmux}/.tmux.conf";
 
-    # カスタム設定 .tmux.conf.local をシンボリックリンク
-    # prefix キーの変更やキーバインドのカスタマイズはこちらで行う
-    ".tmux.conf.local".source = ./files/tmux.conf.local;
+    # カスタム設定 .tmux.conf.local を動的に生成
+    # gpakosz のデフォルト設定 + カスタマイズを結合
+    ".tmux.conf.local".text = ''
+      ${builtins.readFile "${gpakoszTmux}/.tmux.conf.local"}
+
+      # ============================================================
+      # User customizations (added by Nix)
+      # ============================================================
+
+      # force Vi mode
+      set -g status-keys vi
+      set -g mode-keys vi
+
+      # Custom prefix key: Ctrl-t
+      set -gu prefix2
+      unbind C-a
+      unbind C-b
+      set -g prefix ^T
+      bind t send-prefix
+
+      # next window: ^@ ^N sp n
+      unbind ^@
+      bind ^@ next-window
+      unbind ^N
+      bind ^N next-window
+      unbind " "
+      bind " " next-window
+      unbind n
+      bind n next-window
+
+      # split window (vertical): |
+      unbind |
+      bind | split-window
+
+      # previous window: Backspace
+      unbind BSpace
+      bind BSpace previous-window
+    '';
   };
 
   # オプション: 追加ツール
