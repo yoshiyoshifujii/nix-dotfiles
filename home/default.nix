@@ -14,12 +14,10 @@
         ".zshenv".source = ./files/zshenv;
         ".zprofile".source = ./files/zprofile;
         ".p10k.zsh".source = ./files/p10k.zsh;
-        # .zshrc と oh-my-zsh 関連は home/zsh.nix で管理
       };
 
       xdg.configFile = {
         "mise/config.toml".source = ./files/mise/config.toml;
-        # mise activation は home/zsh.nix で直接実行
       };
 
       imports = [
