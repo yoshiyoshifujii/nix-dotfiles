@@ -28,8 +28,14 @@ in
   # カスタマイズ方法:
   # - メイン設定ファイル (.tmux.conf) は編集しない
   # - カスタマイズは .tmux.conf.local で行う
-  # - home/files/tmux.conf.local を編集
-  # - git add → make apply で反映
+  # - このファイル (home/tmux.nix) の home.file.".tmux.conf.local".text 内
+  #   「User customizations (added by Nix)」セクションを編集
+  # - git add home/tmux.nix → make apply で反映
+  #
+  # gpakosz/.tmux のバージョン更新:
+  # - 上記の rev と sha256 を更新
+  # - nix-prefetch-github gpakosz .tmux でハッシュ取得
+  # - カスタマイズは自動的に最新版に追記される
   # ============================================================
 
   home.file = {
