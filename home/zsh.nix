@@ -53,6 +53,8 @@
     sessionVariables = {
       EDITOR = "vim";
       VISUAL = "vim";
+      # oh-my-zsh のキャッシュディレクトリを XDG Base Directory に準拠
+      ZSH_CACHE_DIR = "$HOME/.cache/oh-my-zsh";
     };
   };
 
