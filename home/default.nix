@@ -20,6 +20,7 @@
         ./fonts.nix
         ./ghostty.nix
         ./wezterm.nix
+        ./tmux.nix
         ./zsh.nix
         ./oh-my-zsh.nix
         ./mise.nix

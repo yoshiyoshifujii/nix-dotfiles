@@ -26,6 +26,7 @@
   environment.systemPackages = with pkgs; [
     git
     mise
+    tmux
     wezterm
     elan
   ];
