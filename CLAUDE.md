@@ -1,46 +1,45 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code when working with this repository.
 
 ## Communication
 
 **日本語で対話してください。** このリポジトリの作業では、ユーザーとのすべてのコミュニケーションを日本語で行ってください。
 
-## Overview
+## Repository Overview
 
-This is a **nix-darwin configuration** for macOS (Apple Silicon) that provides declarative system and user environment management. The configuration uses:
+This is a **nix-darwin configuration** for macOS (Apple Silicon) that provides declarative system and user environment management using:
 
 - **nix-darwin**: System-level macOS configuration
 - **Home Manager**: User-level dotfiles and configurations
-- **mise**: Development tool version management (Java, Python, Node.js, Rust, etc.)
+- **mise**: Development tool version management
 - **Homebrew**: GUI application installation via Casks
 
-## Common Commands
+For detailed technical documentation, see [ARCHITECTURE.md](ARCHITECTURE.md).
 
-### Building and Applying Configuration
+## Important Workflow Rules
 
-```bash
-# Build the configuration (dry-run to check for errors)
-make build
+### 1. Git-Tracked Files Only
 
-# Apply the configuration (requires sudo)
-make apply
-
-# Initial setup (first-time only)
-make init
-```
-
-**IMPORTANT**: After modifying any files, you MUST stage them with `git add` before running `make build` or `make apply`. Nix flakes only see git-tracked files.
-
-### Managing Development Tools
+**Nix flakes only see files tracked by git.** After modifying any files, you MUST stage them with `git add` before running `make build` or `make apply`. Unstaged changes will NOT be visible to Nix.
 
 ```bash
-# Install all tools defined in mise config
-make mise-install
-
-# Remove all mise installed tools and cache
-make mise-purge
+# Always do this before building:
+git add <modified-files>
+make build  # or make apply
 ```
+
+### 2. Always Use Make Commands
+
+The flake requires `DARWIN_USER`, `NIXBLD_GID`, and optionally `GIT_USER_NAME`/`GIT_USER_EMAIL` environment variables. The Makefile automatically exports these. **Never run `nix` commands directly—always use `make` commands.**
+
+```bash
+make build   # Build configuration
+make apply   # Apply configuration (requires sudo)
+make init    # Initial setup (first-time only)
+```
+
+### 3. Shell Reload After Changes
 
 After applying configuration changes that affect shell files, restart tmux completely:
 
@@ -51,207 +50,29 @@ tmux
 
 Simply opening a new tmux window (LEADER+c) does NOT reload the environment.
 
-## Architecture
+## Common Tasks
 
-### Configuration Flow
+### Modifying Configuration
 
-```
-flake.nix (entry point)
-├── darwin/default.nix (system-level: packages, Homebrew, system settings)
-└── home/default.nix (user-level: dotfiles via Home Manager)
-    ├── home/files/* (zshenv, zprofile, p10k.zsh, mise/config.toml, tmux.conf.local, custom oh-my-zsh plugins, wezterm configs)
-    ├── home/fonts.nix (fonts: powerline-fonts, nerd-fonts)
-    ├── home/zsh.nix (zsh configuration)
-    ├── home/oh-my-zsh.nix (oh-my-zsh, plugins, themes)
-    ├── home/mise.nix (mise development tool version management)
-    ├── home/tmux.nix (tmux configuration using gpakosz/.tmux)
-    ├── home/ghostty.nix (ghostty terminal config)
-    └── home/wezterm.nix (wezterm terminal config)
-```
+See [ARCHITECTURE.md](ARCHITECTURE.md) for detailed instructions on:
+- Adding system packages
+- Adding development tools (mise)
+- Adding GUI applications (Homebrew Cask)
+- Modifying shell configuration (zsh, oh-my-zsh)
+- Modifying Git configuration
+- Modifying tmux configuration
+- Adding new dotfiles
 
-### Key Architectural Decisions
+### Basic Workflow
 
-1. **Environment Variables**: The flake requires `DARWIN_USER` and `NIXBLD_GID` environment variables. The Makefile automatically exports these, which is why direct `nix` commands won't work—always use `make` commands.
+1. Edit configuration files
+2. Stage changes: `git add <files>`
+3. Build: `make build` (optional, for testing)
+4. Apply: `make apply`
+5. Restart shell/tmux if needed
 
-2. **Impure Builds**: All builds use `--impure` flag because they read environment variables to align with existing system configuration.
+## System-Specific Notes
 
-3. **Tool Management Split**:
-   - **System packages** (git, mise, tmux, wezterm): Managed by nix-darwin in `darwin/default.nix`
-   - **GUI applications** (ghostty): Managed by Homebrew Cask in `darwin/default.nix`
-   - **Development tools** (Java, Python, Node, Rust, Maven, Gradle, etc.): Managed by mise via `home/files/mise/config.toml`
-
-4. **Shell Configuration**:
-   - **zsh and oh-my-zsh**: Managed declaratively via Home Manager's `programs.zsh` module in `home/zsh.nix`
-   - **zshenv and zprofile**: Managed as plain files in `home/files/` for environment variable setup
-   - **oh-my-zsh custom plugins**: User-defined plugins in `home/files/oh-my-zsh/custom/plugins/` are symlinked to `~/.oh-my-zsh-custom/plugins/`
-   - This hybrid approach allows declarative management of core configuration while maintaining flexibility for custom plugins
-
-5. **Backup Strategy**: `backupFileExtension = "backup"` in `home/default.nix` ensures existing dotfiles are backed up with a `.backup` extension when Home Manager takes over management.
-
-## Modifying Configuration
-
-### Adding System Packages
-
-Edit `darwin/default.nix`:
-
-```nix
-environment.systemPackages = with pkgs; [
-  git
-  mise
-  wezterm
-  # Add new package here
-];
-```
-
-### Adding Development Tools
-
-Edit `home/files/mise/config.toml`:
-
-```toml
-[tools]
-java = "temurin-21"
-python = "latest"
-node = "latest"
-# Add new tool here
-```
-
-After applying configuration, run `make mise-install` to install the tools.
-
-### Adding GUI Applications
-
-Edit `darwin/default.nix`:
-
-```nix
-homebrew = {
-  enable = true;
-  casks = [
-    "ghostty"
-    # Add new cask here
-  ];
-};
-```
-
-### Modifying Shell Configuration
-
-**Zsh basic configuration**:
-1. Edit `home/zsh.nix` to modify zsh settings (mise, editor, etc.)
-2. Stage changes: `git add home/zsh.nix`
-3. Apply: `make apply`
-4. Restart shell/tmux
-
-**oh-my-zsh configuration (plugins, theme)**:
-1. Edit `home/oh-my-zsh.nix` to modify oh-my-zsh settings
-2. Stage changes: `git add home/oh-my-zsh.nix`
-3. Apply: `make apply`
-4. Restart shell/tmux
-
-**Environment variables (zshenv, zprofile)**:
-1. Edit files in `home/files/` (zshenv, zprofile)
-2. Stage changes: `git add home/files/filename`
-3. Apply: `make apply`
-4. Restart shell/tmux
-
-**Powerlevel10k theme customization**:
-1. Run `p10k configure` to generate new configuration
-2. Copy to repository: `cp ~/.p10k.zsh home/files/p10k.zsh`
-3. Stage and apply: `git add home/files/p10k.zsh && make apply`
-
-**mise tool versions**:
-1. Edit `home/files/mise/config.toml` to add/update tool versions
-2. Stage and apply: `git add home/files/mise/config.toml && make apply`
-3. Install tools: `make mise-install`
-
-### Modifying Git Configuration
-
-**Git basic configuration** (core.editor, color.ui) is managed declaratively in `home/git.nix`. User-specific settings (user.name, user.email) are configured via environment variables.
-
-**Set Git user configuration**:
-
-Option 1: Set environment variables before apply
-```bash
-export GIT_USER_NAME="Your Name"
-export GIT_USER_EMAIL="your@email.com"
-make apply
-```
-
-Option 2: Pass as command-line arguments
-```bash
-make apply GIT_USER_NAME="Your Name" GIT_USER_EMAIL="your@email.com"
-```
-
-Option 3: Edit Makefile to set default values
-```makefile
-# In Makefile:
-GIT_USER_NAME ?= Your Name
-GIT_USER_EMAIL ?= your@email.com
-```
-
-Then run `make apply`.
-
-**Note**: If environment variables are not set, git user.name and user.email will not be configured (existing settings will be preserved).
-
-### Modifying tmux Configuration
-
-**tmux configuration** is managed using [gpakosz/.tmux](https://github.com/gpakosz/.tmux):
-
-1. **Update base configuration** (gpakosz/.tmux version):
-   - Edit `home/tmux.nix` to update `rev` and `sha256`
-   - Use `nix-shell -p nix-prefetch-github --run 'nix-prefetch-github gpakosz .tmux'` to get the latest hash
-   - Stage and apply: `git add home/tmux.nix && make apply`
-
-2. **Customize settings** (prefix key, key bindings, theme):
-   - Edit `home/files/tmux.conf.local` for customizations
-   - **NEVER edit** `.tmux.conf` directly (managed by gpakosz/.tmux)
-   - Stage and apply: `git add home/files/tmux.conf.local && make apply`
-   - Restart tmux: `tmux kill-server && tmux`
-
-3. **Key bindings in current config**:
-   - Prefix key: `Ctrl-t` (customized from default `Ctrl-b`)
-   - Split horizontal: `Ctrl-t` → `|`
-   - Next window: `Ctrl-t` → `n` or `Space`
-   - Previous window: `Ctrl-t` → `Backspace`
-   - Copy mode: `Ctrl-t` → `[` (Vi mode enabled)
-
-### Adding New Dotfiles
-
-1. Create the file in `home/files/`
-2. Add to `home/default.nix`:
-
-```nix
-home.file = {
-  ".newfile".source = ./files/newfile;
-  # For XDG config files:
-};
-
-xdg.configFile = {
-  "appname/config.toml".source = ./files/appname/config.toml;
-};
-```
-
-3. Stage with `git add`, then `make apply`
-
-## Important Notes
-
-### Git-Tracked Files Only
-
-Nix flakes only see files tracked by git. Always run `git add` for new or modified files before building. Unstaged changes will NOT be visible to Nix.
-
-### Path Management
-
-The configuration has migrated away from pyenv, nvm, and asdf to mise for unified version management. The PATH should no longer contain paths from these legacy tools. If old tool paths appear in PATH, check:
-
-1. `.zprofile` - should only have Homebrew, Toolbox, and elan
-2. `.zshrc` - should NOT have asdf, nvm, or pyenv plugins
-3. `.zshenv` - should conditionally load cargo if it exists
-
-### Security Checks
-
-Pre-commit hooks with gitleaks can be installed:
-
-```bash
-nix shell nixpkgs#pre-commit -c pre-commit install
-```
-
-### System-Specific Configuration
-
-This configuration is for **Apple Silicon (aarch64) only**. The Makefile auto-detects the architecture and constructs the appropriate configuration name (`$USER-darwin`).
+- This configuration is for **Apple Silicon (aarch64) only**
+- The Makefile auto-detects architecture and constructs the configuration name (`$USER-darwin`)
+- All builds use `--impure` flag to read environment variables

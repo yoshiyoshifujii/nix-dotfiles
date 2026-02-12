@@ -48,26 +48,61 @@ exec $SHELL
 
 ## Usage
 
-Initial setup (first time only):
+### Initial Setup
+
+First time only:
 
 ```bash
 make init
 ```
 
-Apply the configuration:
+### Configure Git User (Optional)
+
+Set your git user information:
+
+```bash
+export GIT_USER_NAME="Your Name"
+export GIT_USER_EMAIL="your@email.com"
+```
+
+Or pass as arguments to make:
+
+```bash
+make apply GIT_USER_NAME="Your Name" GIT_USER_EMAIL="your@email.com"
+```
+
+### Apply Configuration
 
 ```bash
 make apply
 ```
 
-適用後は新しいシェルセッションを開いて、次を実行してください:
+After applying, restart your shell or tmux:
+
+```bash
+tmux kill-server
+tmux
+```
+
+### Install Development Tools
+
+Install tools defined in mise config:
 
 ```bash
 make mise-install
-java -version
 ```
 
-Build only:
+Verify installation:
+
+```bash
+java -version
+python --version
+node --version
+```
+
+### Build Only (Dry Run)
+
+To check for errors without applying:
 
 ```bash
 make build
@@ -105,3 +140,8 @@ make help
 | `clean` | Remove local build artifacts (`result`) |
 | `mise-install` | Install tools defined in mise config |
 | `mise-purge` | Remove mise installed tools and cache |
+
+## Documentation
+
+- **[ARCHITECTURE.md](ARCHITECTURE.md)**: Detailed technical documentation, configuration structure, and how to modify settings
+- **[CLAUDE.md](CLAUDE.md)**: Guidance for Claude Code when working with this repository
