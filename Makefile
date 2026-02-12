@@ -5,8 +5,8 @@
 .DEFAULT_GOAL := help
 
 # ユーザー名 (環境変数が設定されていればそれを優先、なければ自動検出)
-DARWIN_USER ?= $(shell whoami)
-export DARWIN_USER
+SYSTEM_USER ?= $(shell whoami)
+export SYSTEM_USER
 
 # システム検出
 UNAME := $(shell uname)
@@ -14,9 +14,9 @@ ARCH := $(shell uname -m)
 
 ifeq ($(UNAME),Darwin)
   ifeq ($(ARCH),arm64)
-    DARWIN_CONFIG := $(DARWIN_USER)-darwin
+    DARWIN_CONFIG := $(SYSTEM_USER)-darwin
   else
-    DARWIN_CONFIG := $(DARWIN_USER)-darwin-x86
+    DARWIN_CONFIG := $(SYSTEM_USER)-darwin-x86
   endif
 endif
 

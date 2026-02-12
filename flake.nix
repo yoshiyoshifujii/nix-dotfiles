@@ -18,12 +18,19 @@
   outputs = { self, nixpkgs, nix-darwin, home-manager, ... }@inputs:
     let
       # デフォルトユーザー (nix-darwin用)
-      # 環境変数 DARWIN_USER が必須。設定されていない場合はエラー
+      # 環境変数 SYSTEM_USER が必須。設定されていない場合はエラー
       defaultUser =
-        let envUser = builtins.getEnv "DARWIN_USER";
-        in if envUser != ""
-           then envUser
-           else builtins.throw "DARWIN_USER environment variable is not set. Please run via Makefile or set DARWIN_USER manually.";
+        let systemUser = builtins.getEnv "SYSTEM_USER";
+        in if systemUser != ""
+           then systemUser
+           else builtins.throw "SYSTEM_USER environment variable is not set. Please run via Makefile or set SYSTEM_USER manually.";
+
+      # nixbld グループ GID を環境変数から読み込み（未設定はエラー）
+      nixbldGid =
+        let gidStr = builtins.getEnv "NIXBLD_GID";
+        in if gidStr != ""
+           then builtins.fromJSON gidStr
+           else builtins.throw "NIXBLD_GID environment variable is not set. Please run via Makefile or set NIXBLD_GID manually.";
 
       # Git設定を環境変数から読み込み（空の場合はnull）
       gitUserName =
@@ -46,6 +53,7 @@
           modules = [
             {
               _module.args.username = defaultUser;
+              _module.args.nixbldGid = nixbldGid;
               _module.args.gitUserName = gitUserName;
               _module.args.gitUserEmail = gitUserEmail;
             }

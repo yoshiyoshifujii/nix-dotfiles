@@ -1,9 +1,12 @@
-{ config, pkgs, username, ... }:
+{ config, pkgs, username, gitUserName, gitUserEmail, ... }:
 {
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
     backupFileExtension = "backup";
+    extraSpecialArgs = {
+      inherit gitUserName gitUserEmail;
+    };
     users.${username} = { ... }: {
       home.username = username;
       home.stateVersion = "24.05";

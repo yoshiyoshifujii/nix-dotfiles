@@ -1,4 +1,4 @@
-{ config, pkgs, username, ... }:
+{ config, pkgs, username, nixbldGid, ... }:
 {
   # ============================================================
   # nix-darwin システムレベル設定
@@ -13,12 +13,8 @@
     };
   };
 
-  # nixbld グループの GID を既存環境に合わせる (Makefile から注入)
-  ids.gids.nixbld =
-    let
-      gidStr = builtins.getEnv "NIXBLD_GID";
-    in
-    if gidStr == "" then 350 else builtins.fromJSON gidStr;
+  # nixbld グループの GID を既存環境に合わせる (flake.nix から注入)
+  ids.gids.nixbld = nixbldGid;
 
   # ============================================================
   # システムパッケージ
