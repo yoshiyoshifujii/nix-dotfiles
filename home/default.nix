@@ -24,6 +24,7 @@
         ./zsh.nix
         ./oh-my-zsh.nix
         ./mise.nix
+        ./git.nix
       ];
     };
   };

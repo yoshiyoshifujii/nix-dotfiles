@@ -161,6 +161,35 @@ homebrew = {
 2. Stage and apply: `git add home/files/mise/config.toml && make apply`
 3. Install tools: `make mise-install`
 
+### Modifying Git Configuration
+
+**Git basic configuration** (core.editor, color.ui) is managed declaratively in `home/git.nix`. User-specific settings (user.name, user.email) are configured via environment variables.
+
+**Set Git user configuration**:
+
+Option 1: Set environment variables before apply
+```bash
+export GIT_USER_NAME="Your Name"
+export GIT_USER_EMAIL="your@email.com"
+make apply
+```
+
+Option 2: Pass as command-line arguments
+```bash
+make apply GIT_USER_NAME="Your Name" GIT_USER_EMAIL="your@email.com"
+```
+
+Option 3: Edit Makefile to set default values
+```makefile
+# In Makefile:
+GIT_USER_NAME ?= Your Name
+GIT_USER_EMAIL ?= your@email.com
+```
+
+Then run `make apply`.
+
+**Note**: If environment variables are not set, git user.name and user.email will not be configured (existing settings will be preserved).
+
 ### Modifying tmux Configuration
 
 **tmux configuration** is managed using [gpakosz/.tmux](https://github.com/gpakosz/.tmux):

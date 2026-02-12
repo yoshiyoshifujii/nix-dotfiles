@@ -25,6 +25,15 @@
            then envUser
            else builtins.throw "DARWIN_USER environment variable is not set. Please run via Makefile or set DARWIN_USER manually.";
 
+      # Git設定を環境変数から読み込み（空の場合はnull）
+      gitUserName =
+        let name = builtins.getEnv "GIT_USER_NAME";
+        in if name != "" then name else null;
+
+      gitUserEmail =
+        let email = builtins.getEnv "GIT_USER_EMAIL";
+        in if email != "" then email else null;
+
       # macOS (Apple Silicon)
       system = "aarch64-darwin";
     in {
@@ -35,7 +44,11 @@
         "${defaultUser}-darwin" = nix-darwin.lib.darwinSystem {
           inherit system;
           modules = [
-            { _module.args.username = defaultUser; }
+            {
+              _module.args.username = defaultUser;
+              _module.args.gitUserName = gitUserName;
+              _module.args.gitUserEmail = gitUserEmail;
+            }
             ./darwin/default.nix
             ./home/default.nix
             home-manager.darwinModules.home-manager
