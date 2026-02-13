@@ -26,6 +26,7 @@
   # ============================================================
   environment.systemPackages = with pkgs; [
     pkgs."claude-code"
+    awscli2
     git
     mise
     tmux
