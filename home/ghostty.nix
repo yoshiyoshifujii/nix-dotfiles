@@ -18,5 +18,11 @@
     # パディング（WezTerm の 1cell 相当を近似）
     window-padding-x = 10
     window-padding-y = 10
+
+    # 起動時にウィンドウを最大化する
+    maximize = true
+
+    # 最後のウィンドウを閉じたら Ghostty を終了する
+    quit-after-last-window-closed = true
   '';
 }
