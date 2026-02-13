@@ -29,6 +29,7 @@
     awscli2
     git
     mise
+    pkgs."terminal-notifier"
     tmux
     wezterm
     elan
