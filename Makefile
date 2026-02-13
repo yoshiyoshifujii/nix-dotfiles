@@ -50,6 +50,10 @@ help:
 	@echo "  init    Initial nix-darwin setup (macOS only)"
 	@echo "  apply   Apply nix-darwin configuration"
 	@echo "  build   Build nix-darwin configuration"
+	@echo "  flake-update  Update all flake inputs"
+	@echo "  flake-update-nixpkgs  Update only nixpkgs input"
+	@echo "  flake-lock-diff  Show flake.lock diff"
+	@echo "  closure-diff  Compare current system and ./result closure"
 	@echo "  clean   Remove local build artifacts"
 	@echo "  mise-install  Install tools defined by mise config"
 	@echo "  mise-purge    Remove mise installed tools and cache"
@@ -70,6 +74,31 @@ endif
 clean:
 	@echo "Removing local build artifacts..."
 	rm -f result
+
+# ============================================================
+# Flake Update
+# ============================================================
+
+flake-update:
+	@echo "Updating all flake inputs..."
+	$(NIX) flake update
+
+flake-update-nixpkgs:
+	@echo "Updating flake input: nixpkgs"
+	$(NIX) flake lock --update-input nixpkgs
+
+flake-lock-diff:
+	@echo "Showing flake.lock diff..."
+	git diff -- flake.lock
+
+closure-diff:
+ifeq ($(UNAME),Darwin)
+	@echo "Comparing closures: /run/current-system vs ./result"
+	$(NIX) store diff-closures /run/current-system ./result
+else
+	@echo "closure-diff target is only available on macOS"
+	@exit 1
+endif
 
 # ============================================================
 # Apply

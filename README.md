@@ -108,6 +108,33 @@ To check for errors without applying:
 make build
 ```
 
+### Update Flake Inputs Safely
+
+When updating `flake.lock`, review the diff and build impact before applying:
+
+```bash
+# 1) Update lock file
+make flake-update
+
+# 2) Review lock diff
+make flake-lock-diff
+
+# 3) Build new system closure
+make build
+
+# 4) Compare current system vs new build
+make closure-diff
+
+# 5) Apply if everything looks good
+make apply
+```
+
+Tip: To reduce update scope/noise, update only one input:
+
+```bash
+make flake-update-nixpkgs
+```
+
 ## Security Check (pre-commit + gitleaks)
 
 Install and enable:
@@ -137,6 +164,10 @@ make help
 | `init` | Initial nix-darwin setup (macOS only) |
 | `apply` | Apply nix-darwin configuration |
 | `build` | Build nix-darwin configuration |
+| `flake-update` | Update all flake inputs |
+| `flake-update-nixpkgs` | Update only the `nixpkgs` input |
+| `flake-lock-diff` | Show `flake.lock` diff |
+| `closure-diff` | Compare `/run/current-system` and `./result` |
 | `clean` | Remove local build artifacts (`result`) |
 | `mise-install` | Install tools defined in mise config |
 | `mise-purge` | Remove mise installed tools and cache |
