@@ -13,6 +13,11 @@
     };
   };
 
+  nixpkgs.config.allowUnfreePredicate = pkg:
+    builtins.elem (pkgs.lib.getName pkg) [
+      "claude-code"
+    ];
+
   # nixbld グループの GID を既存環境に合わせる (flake.nix から注入)
   ids.gids.nixbld = nixbldGid;
 
@@ -20,6 +25,7 @@
   # システムパッケージ
   # ============================================================
   environment.systemPackages = with pkgs; [
+    pkgs."claude-code"
     git
     mise
     tmux
