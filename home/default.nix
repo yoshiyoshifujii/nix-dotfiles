@@ -28,6 +28,7 @@
         ./oh-my-zsh.nix
         ./mise.nix
         ./git.nix
+        ./neovim.nix
       ];
     };
   };
