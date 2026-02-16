@@ -50,8 +50,13 @@
       "1password"
       "1password-cli"
       "alfred"
+      "bettertouchtool"
+      "docker-desktop"
       "ghostty"
+      "jetbrains-toolbox"
+      "karabiner-elements"
       "macskk"
+      "miro"
     ];
   };
 
