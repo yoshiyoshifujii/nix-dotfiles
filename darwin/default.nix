@@ -32,6 +32,7 @@
     mise
     neovim
     pkgs."terminal-notifier"
+    ripgrep
     tmux
     wezterm
     elan
