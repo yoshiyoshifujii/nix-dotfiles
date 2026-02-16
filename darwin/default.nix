@@ -29,6 +29,7 @@
     awscli2
     git
     mise
+    neovim
     pkgs."terminal-notifier"
     tmux
     wezterm
@@ -46,7 +47,11 @@
   homebrew = {
     enable = true;
     casks = [
+      "1password"
+      "1password-cli"
+      "alfred"
       "ghostty"
+      "macskk"
     ];
   };
 
