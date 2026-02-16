@@ -29,6 +29,7 @@
         ./mise.nix
         ./git.nix
         ./neovim.nix
+        ./macskk.nix
       ];
     };
   };
