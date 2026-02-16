@@ -28,6 +28,7 @@
     pkgs."claude-code"
     awscli2
     git
+    gh
     mise
     neovim
     pkgs."terminal-notifier"
