@@ -17,13 +17,6 @@
 
   outputs = { self, nixpkgs, nix-darwin, home-manager, ... }@inputs:
     let
-      # ユーザー設定ファイルを読み込み（存在しない場合はデフォルト値）
-      userConfig =
-        let configPath = ./config.nix;
-        in if builtins.pathExists configPath
-           then import configPath
-           else { git = { userName = null; userEmail = null; }; };
-
       # デフォルトユーザー (nix-darwin用)
       # 環境変数 SYSTEM_USER が必須。設定されていない場合はエラー
       defaultUser =
@@ -39,9 +32,14 @@
            then builtins.fromJSON gidStr
            else builtins.throw "NIXBLD_GID environment variable is not set. Please run via Makefile or set NIXBLD_GID manually.";
 
-      # Git設定を config.nix から読み込み
-      gitUserName = userConfig.git.userName;
-      gitUserEmail = userConfig.git.userEmail;
+      # Git設定を環境変数から読み込み（Makefile が config.nix から読み込む）
+      gitUserName =
+        let name = builtins.getEnv "GIT_USER_NAME";
+        in if name != "" then name else null;
+
+      gitUserEmail =
+        let email = builtins.getEnv "GIT_USER_EMAIL";
+        in if email != "" then email else null;
 
       # macOS (Apple Silicon)
       system = "aarch64-darwin";
