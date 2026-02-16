@@ -71,12 +71,6 @@ GIT_USER_NAME=Your Name
 GIT_USER_EMAIL=your@email.com
 ```
 
-Alternatively, you can pass as arguments to make:
-
-```bash
-make apply GIT_USER_NAME="Your Name" GIT_USER_EMAIL="your@email.com"
-```
-
 ### Apply Configuration
 
 ```bash

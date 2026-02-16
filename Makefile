@@ -36,12 +36,6 @@ export NIX_CONFIG
 NIXBLD_GID := $(shell dscl . -read /Groups/nixbld PrimaryGroupID 2>/dev/null | awk '{print $$2}')
 export NIXBLD_GID
 
-# Git設定（オプション - 未設定でも問題なし）
-GIT_USER_NAME ?=
-GIT_USER_EMAIL ?=
-export GIT_USER_NAME
-export GIT_USER_EMAIL
-
 MISE_DATA_DIR ?= $(HOME)/.local/share/mise
 MISE_STATE_DIR ?= $(HOME)/.local/state/mise
 MISE_CACHE_DIR ?= $(HOME)/Library/Caches/mise
