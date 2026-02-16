@@ -1,0 +1,8 @@
+{
+  # Git user configuration
+  # Copy this file to config.nix and fill in your values
+  git = {
+    userName = "Your Name";
+    userEmail = "your@email.com";
+  };
+}

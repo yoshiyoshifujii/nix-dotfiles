@@ -4,10 +4,6 @@
 
 .DEFAULT_GOAL := help
 
-# .env ファイルから環境変数を読み込み（存在する場合）
--include .env
-export
-
 # ユーザー名 (環境変数が設定されていればそれを優先、なければ自動検出)
 SYSTEM_USER ?= $(shell whoami)
 export SYSTEM_USER

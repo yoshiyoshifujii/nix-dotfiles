@@ -58,17 +58,21 @@ make init
 
 ### Configure Git User (Optional)
 
-Create a `.env` file from the template and set your git user information:
+Create a `config.nix` file from the template and set your git user information:
 
 ```bash
-cp .env.example .env
-# Edit .env and fill in your values
+cp config.nix.example config.nix
+# Edit config.nix and fill in your values
 ```
 
-`.env` example:
-```bash
-GIT_USER_NAME=Your Name
-GIT_USER_EMAIL=your@email.com
+`config.nix` example:
+```nix
+{
+  git = {
+    userName = "Your Name";
+    userEmail = "your@email.com";
+  };
+}
 ```
 
 ### Apply Configuration
