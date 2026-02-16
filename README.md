@@ -58,14 +58,20 @@ make init
 
 ### Configure Git User (Optional)
 
-Set your git user information:
+Create a `.env` file from the template and set your git user information:
 
 ```bash
-export GIT_USER_NAME="Your Name"
-export GIT_USER_EMAIL="your@email.com"
+cp .env.example .env
+# Edit .env and fill in your values
 ```
 
-Or pass as arguments to make:
+`.env` example:
+```bash
+GIT_USER_NAME=Your Name
+GIT_USER_EMAIL=your@email.com
+```
+
+Alternatively, you can pass as arguments to make:
 
 ```bash
 make apply GIT_USER_NAME="Your Name" GIT_USER_EMAIL="your@email.com"
