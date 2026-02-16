@@ -1,8 +1,0 @@
-if [ -f /etc/profiles/per-user/$USER/etc/profile.d/hm-session-vars.sh ]; then
-  . /etc/profiles/per-user/$USER/etc/profile.d/hm-session-vars.sh
-fi
-
-# PATH settings
-if [ -d "$HOME/Library/Application Support/JetBrains/Toolbox/scripts" ]; then
-  export PATH="$HOME/Library/Application Support/JetBrains/Toolbox/scripts:$PATH"
-fi

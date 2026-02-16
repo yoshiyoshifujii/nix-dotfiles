@@ -6,6 +6,14 @@
   programs.zsh = {
     enable = true;
 
+    # .zshenv に追加する内容
+    envExtra = ''
+      # PATH settings
+      if [ -d "$HOME/Library/Application Support/JetBrains/Toolbox/scripts" ]; then
+        export PATH="$HOME/Library/Application Support/JetBrains/Toolbox/scripts:$PATH"
+      fi
+    '';
+
     # Additional configuration
     initContent = lib.mkMerge [
       # Powerlevel10k instant prompt (must be at the top)
