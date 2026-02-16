@@ -51,6 +51,7 @@
       "1password-cli"
       "alfred"
       "bettertouchtool"
+      "clipy"
       "docker-desktop"
       "ghostty"
       "jetbrains-toolbox"
