@@ -12,6 +12,11 @@
       if [ -d "$HOME/Library/Application Support/JetBrains/Toolbox/scripts" ]; then
         export PATH="$HOME/Library/Application Support/JetBrains/Toolbox/scripts:$PATH"
       fi
+
+      # Load local zshenv if it exists
+      if [ -f "$HOME/.zshenv.local" ]; then
+        source "$HOME/.zshenv.local"
+      fi
     '';
 
     # Additional configuration
