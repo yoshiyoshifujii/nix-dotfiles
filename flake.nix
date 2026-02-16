@@ -32,7 +32,7 @@
            then builtins.fromJSON gidStr
            else builtins.throw "NIXBLD_GID environment variable is not set. Please run via Makefile or set NIXBLD_GID manually.";
 
-      # Git設定を環境変数から読み込み（Makefile が config.nix から読み込む）
+      # Git設定を環境変数から読み込み（Makefile が .env から読み込む）
       gitUserName =
         let name = builtins.getEnv "GIT_USER_NAME";
         in if name != "" then name else null;
