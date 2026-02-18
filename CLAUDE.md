@@ -1,78 +1,50 @@
-# CLAUDE.md
+# Claude Code ガイドライン
 
-This file provides guidance to Claude Code when working with this repository.
+## プロジェクト概要
 
-## Communication
+macOS 向けの `nix-darwin` 設定リポジトリ。
+Flake ベースでシステム設定を管理し、変更は「最小差分・再現可能・安全」を優先する。
 
-**日本語で対話してください。** このリポジトリの作業では、ユーザーとのすべてのコミュニケーションを日本語で行ってください。
+## ディレクトリ構造
 
-## Repository Overview
+- `flake.nix` - エントリポイント（flake outputs 定義）
+- `darwin/` - macOS（nix-darwin）関連の設定
+- `home/` - Home Manager 関連の設定
+- `Makefile` - `nix-darwin` の補助コマンド
+- `README.md` - セットアップと運用メモ
 
-This is a **nix-darwin configuration** for macOS (Apple Silicon) that provides declarative system and user environment management using:
+## 開発コマンド
 
-- **nix-darwin**: System-level macOS configuration
-- **Home Manager**: User-level dotfiles and configurations
-- **mise**: Development tool version management
-- **Homebrew**: GUI application installation via Casks
+- `make help` - 利用可能なターゲット一覧
+- `make init` - 初回セットアップ
+- `make build` - 切り替えなしビルド（事前確認）
+- `make apply` - 設定を実機に反映
 
-For detailed technical documentation, see [ARCHITECTURE.md](ARCHITECTURE.md).
+## 設計方針
 
-## Important Workflow Rules
+- やり取りは日本語で行う。
+- 大きな再設計より、意図が明確な小さな変更を優先する。
+- 対象環境は macOS（非 Darwin では `make` ターゲットは失敗する前提）。
+- パッケージ追加は `darwin/default.nix` の `environment.systemPackages` で管理する。
+- Nix 記法は `nixpkgs` 標準（2スペースインデント）に合わせる。
 
-### 1. Git-Tracked Files Only
+## 作業ルール
 
-**Nix flakes only see files tracked by git.** After modifying any files, you MUST stage them with `git add` before running `make build` or `make apply`. Unstaged changes will NOT be visible to Nix.
+### Git ステージングを忘れない
 
-```bash
-# Always do this before building:
-git add <modified-files>
-make build  # or make apply
-```
-
-### 2. Always Use Make Commands
-
-The flake requires `DARWIN_USER`, `NIXBLD_GID`, and optionally `GIT_USER_NAME`/`GIT_USER_EMAIL` environment variables. The Makefile automatically exports these. **Never run `nix` commands directly—always use `make` commands.**
-
-```bash
-make build   # Build configuration
-make apply   # Apply configuration (requires sudo)
-make init    # Initial setup (first-time only)
-```
-
-### 3. Shell Reload After Changes
-
-After applying configuration changes that affect shell files, restart tmux completely:
+Nix flake はgit管理ファイルのみ参照する。変更後は必ず `git add` してからビルドする。
 
 ```bash
-tmux kill-server
-tmux
+git add <変更ファイル>
+make build  # または make apply
 ```
 
-Simply opening a new tmux window (LEADER+c) does NOT reload the environment.
+### `nix` コマンドを直接実行しない
 
-## Common Tasks
+Makefile が必要な環境変数（`DARWIN_USER`、`NIXBLD_GID` 等）を自動でセットする。
+`nix` コマンドは直接使わず、必ず `make` コマンドを使う。
 
-### Modifying Configuration
+## 詳細ドキュメント
 
-See [ARCHITECTURE.md](ARCHITECTURE.md) for detailed instructions on:
-- Adding system packages
-- Adding development tools (mise)
-- Adding GUI applications (Homebrew Cask)
-- Modifying shell configuration (zsh, oh-my-zsh)
-- Modifying Git configuration
-- Modifying tmux configuration
-- Adding new dotfiles
-
-### Basic Workflow
-
-1. Edit configuration files
-2. Stage changes: `git add <files>`
-3. Build: `make build` (optional, for testing)
-4. Apply: `make apply`
-5. Restart shell/tmux if needed
-
-## System-Specific Notes
-
-- This configuration is for **Apple Silicon (aarch64) only**
-- The Makefile auto-detects architecture and constructs the configuration name (`$USER-darwin`)
-- All builds use `--impure` flag to read environment variables
+- アーキテクチャ/設定変更手順: `ARCHITECTURE.md`
+- セットアップ/運用: `README.md`
