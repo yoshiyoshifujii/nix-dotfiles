@@ -68,7 +68,11 @@
   # セキュリティ設定
   # ============================================================
   # sudo コマンドで Touch ID (指紋認証) を使えるようにする
-  security.pam.services.sudo_local.touchIdAuth = true;
+  # reattach = true で tmux 内でも Touch ID が動作する
+  security.pam.services.sudo_local = {
+    touchIdAuth = true;
+    reattach = true;
+  };
 
   # ============================================================
   # シェル設定
