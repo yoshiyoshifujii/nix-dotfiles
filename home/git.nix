@@ -20,6 +20,9 @@ in
       core = {
         editor = "vim -c \"set fenc=utf-8\"";
       };
+      init = {
+        defaultBranch = "main";
+      };
       color = {
         ui = true;
       };
