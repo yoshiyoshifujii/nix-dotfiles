@@ -10,10 +10,10 @@
     font-family = "BIZ UDGothic"
     font-family = "Symbols Nerd Font Mono"
     font-size = 13.0
-    theme = "Adventure"
+    theme = "Catppuccin Mocha"
 
     # 透過
-    background-opacity = 0.8
+    background-opacity = 0.95
 
     # パディング（WezTerm の 1cell 相当を近似）
     window-padding-x = 10
