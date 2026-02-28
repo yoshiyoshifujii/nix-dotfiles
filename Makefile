@@ -49,6 +49,7 @@ help:
 	@echo "  apply   Apply nix-darwin configuration"
 	@echo "  build   Build nix-darwin configuration"
 	@echo "  flake-update  Update all flake inputs"
+	@echo "  flake-update-flow  Run update->build flow with manual apply wait"
 	@echo "  flake-update-nixpkgs  Update only nixpkgs input"
 	@echo "  flake-lock-diff  Show flake.lock diff"
 	@echo "  closure-diff  Compare current system and ./result closure"
@@ -80,6 +81,10 @@ clean:
 flake-update:
 	@echo "Updating all flake inputs..."
 	$(NIX) flake update
+
+flake-update-flow:
+	@echo "Running flake update flow script..."
+	bash scripts/flake-update-flow.sh $(FLOW_ARGS)
 
 flake-update-nixpkgs:
 	@echo "Updating flake input: nixpkgs"
