@@ -30,6 +30,7 @@
     git
     gh
     mise
+    uv
     neovim
     pkgs."terminal-notifier"
     fd
