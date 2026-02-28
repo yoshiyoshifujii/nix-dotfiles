@@ -1,0 +1,4 @@
+interface:
+  display_name: "Darwin Flake Update Flow"
+  short_description: "main同期からflake更新、build、apply待機、commit/pushまでを安全に進める手順。"
+  default_prompt: "nix-dotfiles の更新フローを実行してください。main同期→flake-update→build→apply待機→commit/pushの順で進めます。"
