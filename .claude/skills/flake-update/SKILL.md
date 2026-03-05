@@ -1,6 +1,6 @@
 ---
 name: flake-update
-description: nix flake入力を更新しビルド・コミット・プッシュまでを一括実行する。flake依存パッケージを最新化したい時に使用。
+description: nix flake入力とHomebrewパッケージを更新しビルド・コミット・プッシュまでを一括実行する。依存パッケージを最新化したい時に使用。
 context: fork
 model: sonnet
 allowed-tools: Bash, Read, Grep, Glob
@@ -17,6 +17,15 @@ user-invocable: true
 ## 実行手順
 
 以下のフェーズを順番に実行する。各フェーズの結果を報告しながら進める。
+
+### Phase 0: Homebrew 更新
+
+```bash
+brew update && brew upgrade
+```
+
+- **成功時**: Phase 1 に進む
+- **失敗時**: エラー内容を報告して中断する
 
 ### Phase 1: Flake 更新
 
@@ -76,6 +85,7 @@ git push
 
 | エラー | 対応 |
 |--------|------|
+| `brew update / upgrade` 失敗 | エラー内容を報告して中断 |
 | `make flake-update` 失敗 | ネットワーク等を確認するよう報告して中断 |
 | `make build` 失敗 | エラー内容を詳しく報告して中断 |
 | `git push` 失敗 | エラーを報告する |
@@ -85,6 +95,9 @@ git push
 各フェーズの結果を進捗報告パターンで出力する:
 
 ```
+## Phase 0: Homebrew 更新 ... 完了
+アップグレードされたパッケージ: claude-code x.x.x → x.x.x, ...
+
 ## Phase 1: Flake 更新 ... 完了
 更新された入力: nixpkgs, home-manager, ...
 
