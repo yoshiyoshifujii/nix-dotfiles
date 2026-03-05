@@ -49,7 +49,9 @@ help:
 	@echo "  apply   Apply nix-darwin configuration"
 	@echo "  build   Build nix-darwin configuration"
 	@echo "  flake-update  Update all flake inputs"
-	@echo "  flake-update-flow  Run update->build flow with manual apply wait"
+	@echo "  flake-update-flow  Run pre-apply update flow (alias of flake-update-flow-pre)"
+	@echo "  flake-update-flow-pre  Run brew/update/stage/build before manual apply"
+	@echo "  flake-update-flow-post  Commit/push flake.lock after manual apply"
 	@echo "  flake-update-nixpkgs  Update only nixpkgs input"
 	@echo "  flake-lock-diff  Show flake.lock diff"
 	@echo "  closure-diff  Compare current system and ./result closure"
@@ -83,8 +85,15 @@ flake-update:
 	$(NIX) flake update
 
 flake-update-flow:
-	@echo "Running flake update flow script..."
-	bash scripts/flake-update-flow.sh $(FLOW_ARGS)
+	$(MAKE) flake-update-flow-pre
+
+flake-update-flow-pre:
+	@echo "Running pre-apply flake update flow..."
+	bash scripts/flake-update-flow.sh pre
+
+flake-update-flow-post:
+	@echo "Running post-apply flake update flow..."
+	bash scripts/flake-update-flow.sh post $(FLOW_ARGS)
 
 flake-update-nixpkgs:
 	@echo "Updating flake input: nixpkgs"

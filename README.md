@@ -135,17 +135,20 @@ Tip: To reduce update scope/noise, update only one input:
 make flake-update-nixpkgs
 ```
 
-You can also run the standard flow via script:
+You can also run the standard flow via make targets:
 
 ```bash
-# update + build + wait for manual apply (no commit/push)
+# pre-apply phase: sync + brew update + flake update + build
 make flake-update-flow
 
-# include commit only
-make flake-update-flow FLOW_ARGS="--commit"
+# manual apply (run yourself)
+make apply
 
-# include commit and push
-make flake-update-flow FLOW_ARGS="--push"
+# post-apply phase: commit + push flake.lock
+make flake-update-flow-post
+
+# post-apply phase: commit only (skip push)
+make flake-update-flow-post FLOW_ARGS="--no-push"
 ```
 
 ## Security Check (pre-commit + gitleaks)
@@ -178,7 +181,9 @@ make help
 | `apply` | Apply nix-darwin configuration |
 | `build` | Build nix-darwin configuration |
 | `flake-update` | Update all flake inputs |
-| `flake-update-flow` | Run sync/update/build flow and wait for manual `make apply` |
+| `flake-update-flow` | Alias of `flake-update-flow-pre` |
+| `flake-update-flow-pre` | Run sync + brew update + flake update + stage + build |
+| `flake-update-flow-post` | Commit and push `flake.lock` after manual `make apply` |
 | `flake-update-nixpkgs` | Update only the `nixpkgs` input |
 | `flake-lock-diff` | Show `flake.lock` diff |
 | `closure-diff` | Compare `/run/current-system` and `./result` |

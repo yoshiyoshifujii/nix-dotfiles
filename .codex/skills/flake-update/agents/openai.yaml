@@ -1,0 +1,4 @@
+interface:
+  display_name: "Flake Update"
+  short_description: "Homebrew更新・flake更新・build・apply待機・commit/pushを順に実行する手順。"
+  default_prompt: "nix-dotfiles の flake 更新フローを実行してください。Homebrew更新→flake-update→build→apply待機→commit/pushの順で進めます。"
