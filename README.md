@@ -77,6 +77,12 @@ GIT_USER_EMAIL=your@email.com
 make apply
 ```
 
+You can also run the same operation from any directory after one successful apply:
+
+```bash
+darwinctl apply
+```
+
 After applying, restart your shell or tmux:
 
 ```bash
@@ -127,6 +133,25 @@ make closure-diff
 
 # 5) Apply if everything looks good
 make apply
+```
+
+If you prefer a Homebrew-like entrypoint that works without `cd`, use `darwinctl`:
+
+```bash
+# pre-apply phase: sync + brew update + flake update + build
+darwinctl update
+
+# apply from anywhere
+darwinctl apply
+
+# inspect lock diff
+darwinctl diff
+
+# compare closures after build
+darwinctl closure-diff
+
+# post-apply phase: commit + push flake.lock
+darwinctl post
 ```
 
 Tip: To reduce update scope/noise, update only one input:
@@ -190,6 +215,17 @@ make help
 | `clean` | Remove local build artifacts (`result`) |
 | `mise-install` | Install tools defined in mise config |
 | `mise-purge` | Remove mise installed tools and cache |
+
+Global wrapper command installed by this config:
+
+| Command | Description |
+| --- | --- |
+| `darwinctl update` | Run the standard pre-apply update flow from any directory |
+| `darwinctl apply` | Apply nix-darwin configuration from any directory |
+| `darwinctl diff` | Show `flake.lock` diff |
+| `darwinctl closure-diff` | Compare `/run/current-system` and `./result` |
+| `darwinctl post` | Run post-apply commit/push flow |
+| `darwinctl make ...` | Forward arbitrary targets to the repo `Makefile` |
 
 ## Documentation
 
