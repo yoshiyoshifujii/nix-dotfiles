@@ -54,7 +54,7 @@ help:
 	@echo "  build   Build nix-darwin configuration"
 	@echo "  flake-update  Update all flake inputs"
 	@echo "  flake-update-flow  Run pre-apply update flow (alias of flake-update-flow-pre)"
-	@echo "  flake-update-flow-pre  Run brew/update/stage/build before manual apply"
+	@echo "  flake-update-flow-pre  Run sync/update/stage/build before manual apply"
 	@echo "  flake-update-flow-post  Commit/push flake.lock after manual apply"
 	@echo "  flake-update-nixpkgs  Update only nixpkgs input"
 	@echo "  flake-lock-diff  Show flake.lock diff"

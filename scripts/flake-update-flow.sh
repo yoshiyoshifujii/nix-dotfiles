@@ -12,7 +12,7 @@ Usage:
   scripts/flake-update-flow.sh post [--no-push] [--message "<commit message>"]
 
 Options:
-  pre                   Run brew update/upgrade + flake update + stage lock + build
+  pre                   Run sync + flake update + stage lock + build
   post                  Commit and optionally push after manual make apply
   --no-push             Skip push in post phase
   --message <message>   Commit message (default: "chore(deps): update flake inputs")
@@ -104,15 +104,12 @@ run_pre() {
   ensure_clean_worktree
   checkout_main_if_needed
 
-  run_step "[1/5] Sync main with origin" git fetch origin
+  run_step "[1/4] Sync main with origin" git fetch origin
   git pull --ff-only origin main
 
-  run_step "[2/5] Run brew update/upgrade" brew update
-  brew upgrade
-
-  run_step "[3/5] Run make flake-update" make flake-update
-  run_step "[4/5] Stage flake.lock before build" git add flake.lock
-  run_step "[5/5] Run make build" make build
+  run_step "[2/4] Run make flake-update" make flake-update
+  run_step "[3/4] Stage flake.lock before build" git add flake.lock
+  run_step "[4/4] Run make build" make build
 
   log
   log "Build succeeded. Next step (manual):"

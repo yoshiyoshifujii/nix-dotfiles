@@ -138,7 +138,7 @@ make apply
 If you prefer a Homebrew-like entrypoint that works without `cd`, use `darwinctl`:
 
 ```bash
-# pre-apply phase: sync + brew update + flake update + build
+# pre-apply phase: sync + flake update + build
 darwinctl update
 
 # apply from anywhere
@@ -163,7 +163,7 @@ make flake-update-nixpkgs
 You can also run the standard flow via make targets:
 
 ```bash
-# pre-apply phase: sync + brew update + flake update + build
+# pre-apply phase: sync + flake update + build
 make flake-update-flow
 
 # manual apply (run yourself)
@@ -207,7 +207,7 @@ make help
 | `build` | Build nix-darwin configuration |
 | `flake-update` | Update all flake inputs |
 | `flake-update-flow` | Alias of `flake-update-flow-pre` |
-| `flake-update-flow-pre` | Run sync + brew update + flake update + stage + build |
+| `flake-update-flow-pre` | Run sync + flake update + stage + build |
 | `flake-update-flow-post` | Commit and push `flake.lock` after manual `make apply` |
 | `flake-update-nixpkgs` | Update only the `nixpkgs` input |
 | `flake-lock-diff` | Show `flake.lock` diff |
