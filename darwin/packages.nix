@@ -1,6 +1,5 @@
-{ pkgs, username, ... }:
+{ pkgs, repoRoot, ... }:
 let
-  repoRoot = "/Users/${username}/workspace/git/${username}/nix-dotfiles";
   darwinctl = pkgs.writeShellApplication {
     name = "darwinctl";
     runtimeEnv = {

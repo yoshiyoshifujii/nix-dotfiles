@@ -12,6 +12,10 @@ export
 SYSTEM_USER ?= $(shell whoami)
 export SYSTEM_USER
 
+# この nix-dotfiles リポジトリのパス（darwinctl に焼き込む）
+DARWIN_REPO_ROOT := $(shell pwd)
+export DARWIN_REPO_ROOT
+
 # システム検出
 UNAME := $(shell uname)
 ARCH := $(shell uname -m)
