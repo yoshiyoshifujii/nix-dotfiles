@@ -21,6 +21,12 @@
 
     # Additional configuration
     initContent = lib.mkMerge [
+      # ユーザーローカルの補完ディレクトリを fpath に追加（p10k instant prompt より前に必要）
+      (lib.mkBefore ''
+        # User-local completions directory
+        fpath=(~/.zsh/completions $fpath)
+      '')
+
       # Powerlevel10k instant prompt (must be at the top)
       (lib.mkBefore ''
         # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
