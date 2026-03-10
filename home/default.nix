@@ -10,6 +10,7 @@
     users.${username} = { ... }: {
       home.username = username;
       home.stateVersion = "24.05";
+      home.sessionPath = [ "$HOME/bin" ];
       home.sessionVariables = {
         LANG = "ja_JP.UTF-8";
       };
