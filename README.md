@@ -106,6 +106,24 @@ python --version
 node --version
 ```
 
+If `mise upgrade` or `make mise-install` fails only on Node.js with `gpg failed` or `署名を検査できません: 公開鍵がありません`, the local GnuPG keyring is missing a Node.js release signing key. A warning that `keyboxd` is older than `gpg` can also indicate a stale daemon process. Restart GnuPG daemons, import the missing Node.js key, and retry:
+
+```bash
+gpgconf --kill all
+gpgconf --launch keyboxd
+# import the missing Node.js release signing key
+mise upgrade node
+```
+
+If keyserver access is blocked, temporarily disable Node.js signature verification in `~/.config/mise/config.toml` with:
+
+```toml
+[settings]
+node.verify = false
+```
+
+Re-enable `node.verify` after recovering the keyring.
+
 ### Build Only (Dry Run)
 
 To check for errors without applying:
