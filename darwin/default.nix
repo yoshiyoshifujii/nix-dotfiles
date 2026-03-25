@@ -1,6 +1,7 @@
 { ... }:
 {
   imports = [
+    ./overlays.nix
     ./nix-settings.nix
     ./packages.nix
     ./homebrew.nix
