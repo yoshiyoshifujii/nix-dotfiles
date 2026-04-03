@@ -8,6 +8,7 @@
   # mise の設定ファイル
   xdg.configFile = {
     "mise/config.toml".source = ./files/mise/config.toml;
+    "mise/mise.lock".source = ./files/mise/mise.lock;
   };
 
   # mise activation を zsh に統合

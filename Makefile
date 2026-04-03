@@ -43,6 +43,7 @@ export NIXBLD_GID
 MISE_DATA_DIR ?= $(HOME)/.local/share/mise
 MISE_STATE_DIR ?= $(HOME)/.local/state/mise
 MISE_CACHE_DIR ?= $(HOME)/Library/Caches/mise
+MISE_CONFIG_DIR := $(DARWIN_REPO_ROOT)/home/files/mise
 
 help:
 	@echo "Usage: make <target>"
@@ -60,8 +61,9 @@ help:
 	@echo "  flake-lock-diff  Show flake.lock diff"
 	@echo "  closure-diff  Compare current system and ./result closure"
 	@echo "  clean   Remove local build artifacts"
-	@echo "  mise-install  Install tools defined by mise config"
-	@echo "  mise-purge    Remove mise installed tools and cache"
+	@echo "  mise-install      Install tools defined by mise config"
+	@echo "  mise-purge        Remove mise installed tools and cache"
+	@echo "  mise-update-lock  Update mise.lock in dotfiles (run after editing config.toml versions)"
 
 # ============================================================
 # Build
@@ -166,6 +168,17 @@ mise-purge:
 ifeq ($(UNAME),Darwin)
 	@echo "Purging mise data, state, and cache..."
 	rm -rf "$(MISE_DATA_DIR)" "$(MISE_STATE_DIR)" "$(MISE_CACHE_DIR)"
+else
+	@echo "mise targets are intended for macOS in this repository"
+	@exit 1
+endif
+
+mise-update-lock:
+ifeq ($(UNAME),Darwin)
+	@echo "Updating mise.lock in dotfiles..."
+	MISE_LOCKED=0 mise lock -C "$(MISE_CONFIG_DIR)" || true
+	@echo "mise.lock updated at $(MISE_CONFIG_DIR)/mise.lock"
+	@echo "Next: git add home/files/mise/mise.lock && make build && make apply && mise install"
 else
 	@echo "mise targets are intended for macOS in this repository"
 	@exit 1

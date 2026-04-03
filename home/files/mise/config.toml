@@ -1,9 +1,13 @@
+[settings]
+lockfile = true
+locked = true
+
 [tools]
-java = "temurin-21"
-maven = "latest"
-gradle = "latest"
-rust = "latest"
-python = "latest"
-node = "latest"
-pnpm = "latest"
-go = "latest"
+java = "temurin-21.0.10+7.0.LTS"
+maven = "3.9.14"
+gradle = "9.4.1"
+rust = "1.94.1"
+python = "3.14.3"
+node = "25.8.2"
+pnpm = "10.33.0"
+go = "1.26.1"
