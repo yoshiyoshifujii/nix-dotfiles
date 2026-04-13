@@ -1,13 +1,17 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 {
   # ============================================================
   # oh-my-zsh 設定
   # ============================================================
 
   # oh-my-zsh の設定は programs.zsh.oh-my-zsh で管理
+  # ZSH_CUSTOM をダブルクォートで設定（Home Manager の custom オプションはシングルクォートで展開されないため）
+  programs.zsh.initContent = lib.mkBefore ''
+    ZSH_CUSTOM="$HOME/.oh-my-zsh-custom"
+  '';
+
   programs.zsh.oh-my-zsh = {
     enable = true;
-    custom = "$HOME/.oh-my-zsh-custom";
     theme = "powerlevel10k/powerlevel10k";
     plugins = [
       "aws"
