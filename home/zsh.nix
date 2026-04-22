@@ -49,5 +49,11 @@
       EDITOR = "nvim";
       VISUAL = "nvim";
     };
+
+    # Shell aliases
+    shellAliases = {
+      vi = "nvim";
+      vim = "nvim";
+    };
   };
 }
