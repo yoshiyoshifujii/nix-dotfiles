@@ -18,9 +18,6 @@ in
     enable = true;
     signing.format = null;
     settings = {
-      core = {
-        editor = "vim -c \"set fenc=utf-8\"";
-      };
       init = {
         defaultBranch = "main";
       };
