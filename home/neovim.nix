@@ -5,15 +5,6 @@
   # LazyVim を ~/.config/nvim に配置（未作成時のみ clone）
   # ============================================================
 
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
-    viAlias = true;
-    vimAlias = true;
-    withRuby = false;
-    withPython3 = false;
-  };
-
   home.activation.setupLazyVim = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     NVIM_CONFIG_DIR="$HOME/.config/nvim"
 
