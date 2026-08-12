@@ -170,6 +170,9 @@ darwinctl closure-diff
 
 # post-apply phase: commit + push flake.lock
 darwinctl post
+
+# or run pre -> apply -> post in one go (sudo prompt happens up front)
+darwinctl all
 ```
 
 Tip: To reduce update scope/noise, update only one input:
@@ -192,6 +195,9 @@ make flake-update-flow-post
 
 # post-apply phase: commit only (skip push)
 make flake-update-flow-post FLOW_ARGS="--no-push"
+
+# or run pre -> apply -> post in one go (sudo prompt happens up front)
+make flake-update-flow-all
 ```
 
 ## Security Check (pre-commit + gitleaks)
@@ -227,6 +233,7 @@ make help
 | `flake-update-flow` | Alias of `flake-update-flow-pre` |
 | `flake-update-flow-pre` | Run sync + flake update + stage + build |
 | `flake-update-flow-post` | Commit and push `flake.lock` after manual `make apply` |
+| `flake-update-flow-all` | Run pre -> apply -> post in one go (sudo prompt up front) |
 | `flake-update-nixpkgs` | Update only the `nixpkgs` input |
 | `flake-lock-diff` | Show `flake.lock` diff |
 | `closure-diff` | Compare `/run/current-system` and `./result` |
@@ -243,6 +250,7 @@ Global wrapper command installed by this config:
 | `darwinctl diff` | Show `flake.lock` diff |
 | `darwinctl closure-diff` | Compare `/run/current-system` and `./result` |
 | `darwinctl post` | Run post-apply commit/push flow |
+| `darwinctl all` | Run pre -> apply -> post in one go (sudo prompt up front) |
 | `darwinctl make ...` | Forward arbitrary targets to the repo `Makefile` |
 
 ## Documentation

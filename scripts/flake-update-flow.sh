@@ -10,10 +10,12 @@ usage() {
 Usage:
   scripts/flake-update-flow.sh pre
   scripts/flake-update-flow.sh post [--no-push] [--message "<commit message>"]
+  scripts/flake-update-flow.sh all [--no-push] [--message "<commit message>"]
 
 Options:
   pre                   Run sync + flake update + stage lock + build
   post                  Commit and optionally push after manual make apply
+  all                   Run pre + make apply + post in one go (sudo prompt up front)
   --no-push             Skip push in post phase
   --message <message>   Commit message (default: "chore(deps): update flake inputs")
   -h, --help            Show this help
@@ -42,7 +44,7 @@ parse_args() {
 
   while [[ $# -gt 0 ]]; do
     case "$1" in
-      pre|post)
+      pre|post|all)
         if [[ -n "${PHASE}" ]]; then
           err "phase already set to '${PHASE}'"
           usage
@@ -84,9 +86,18 @@ parse_args() {
 }
 
 ensure_clean_worktree() {
-  if [[ -n "$(git status --porcelain)" ]]; then
+  local status
+  status="$(git status --porcelain)"
+  if [[ -n "${status}" ]]; then
     err "working tree is not clean. Commit/stash changes before running this flow."
     git status --short
+    if [[ "${status}" == "M  flake.lock" ]]; then
+      log
+      log "It looks like a previous flake update flow was interrupted before commit."
+      log "Finish it first, then re-run this flow:"
+      log "  make apply"
+      log "  make flake-update-flow-post"
+    fi
     exit 1
   fi
 }
@@ -101,6 +112,8 @@ checkout_main_if_needed() {
 }
 
 run_pre() {
+  local suppress_next_steps="${1:-false}"
+
   ensure_clean_worktree
   checkout_main_if_needed
 
@@ -110,6 +123,10 @@ run_pre() {
   run_step "[2/4] Run make flake-update" make flake-update
   run_step "[3/4] Stage flake.lock before build" git add flake.lock
   run_step "[4/4] Run make build" make build
+
+  if [[ "${suppress_next_steps}" == "true" ]]; then
+    return 0
+  fi
 
   log
   log "Build succeeded. Next step (manual):"
@@ -137,6 +154,15 @@ run_post() {
   log "Done."
 }
 
+run_all() {
+  run_step "[0/3] Authenticate sudo up front" sudo -v
+
+  run_pre true
+
+  run_step "Run make apply" make apply
+  run_post
+}
+
 main() {
   parse_args "$@"
   cd "${REPO_ROOT}"
@@ -144,6 +170,7 @@ main() {
   case "${PHASE}" in
     pre) run_pre ;;
     post) run_post ;;
+    all) run_all ;;
     *)
       err "unsupported phase: ${PHASE}"
       exit 1

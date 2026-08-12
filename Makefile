@@ -101,6 +101,10 @@ flake-update-flow-post:
 	@echo "Running post-apply flake update flow..."
 	bash scripts/flake-update-flow.sh post $(FLOW_ARGS)
 
+flake-update-flow-all:
+	@echo "Running full flake update flow (pre -> apply -> post)..."
+	bash scripts/flake-update-flow.sh all $(FLOW_ARGS)
+
 flake-update-nixpkgs:
 	@echo "Updating flake input: nixpkgs"
 	$(NIX) flake lock --update-input nixpkgs

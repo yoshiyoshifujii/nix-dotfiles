@@ -23,12 +23,14 @@ Commands:
   diff          Run make flake-lock-diff
   closure-diff  Run make closure-diff
   post          Run make flake-update-flow-post
+  all           Run make flake-update-flow-all (pre -> apply -> post)
   make          Run an arbitrary make target
 
 Examples:
   darwinctl update
   darwinctl apply
   darwinctl post FLOW_ARGS=--no-push
+  darwinctl all
   darwinctl make flake-update-nixpkgs
 EOF
     ;;
@@ -49,6 +51,9 @@ EOF
     ;;
   post)
     exec /usr/bin/make -C "$repo_root" flake-update-flow-post "$@"
+    ;;
+  all)
+    exec /usr/bin/make -C "$repo_root" flake-update-flow-all "$@"
     ;;
   make)
     exec /usr/bin/make -C "$repo_root" "$@"
