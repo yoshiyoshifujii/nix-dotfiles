@@ -19,6 +19,11 @@
       fi
     '';
 
+    # .zprofile に追加する内容（ログインシェル用）
+    profileExtra = ''
+      eval "$(/opt/homebrew/bin/brew shellenv)"
+    '';
+
     # Additional configuration
     initContent = lib.mkMerge [
       # ユーザーローカルの補完ディレクトリを fpath に追加（p10k instant prompt より前に必要）

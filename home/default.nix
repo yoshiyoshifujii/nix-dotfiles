@@ -16,7 +16,6 @@
         LANG = "ja_JP.UTF-8";
       };
       home.file = {
-        ".zprofile".source = ./files/zprofile;
         ".p10k.zsh".source = ./files/p10k.zsh;
       };
 
