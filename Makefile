@@ -64,6 +64,7 @@ help:
 	@echo "  mise-install      Install tools defined by mise config"
 	@echo "  mise-purge        Remove mise installed tools and cache"
 	@echo "  mise-update-lock  Update mise.lock in dotfiles (run after editing config.toml versions)"
+	@echo "  mise-update       Preview latest tool versions (MISE_UPDATE_ARGS=--write to save)"
 
 # ============================================================
 # Build
@@ -177,10 +178,19 @@ else
 	@exit 1
 endif
 
+.PHONY: mise-update mise-update-lock
+mise-update:
+ifeq ($(UNAME),Darwin)
+	python3 scripts/mise-update.py $(MISE_UPDATE_ARGS)
+else
+	@echo "mise targets are intended for macOS in this repository"
+	@exit 1
+endif
+
 mise-update-lock:
 ifeq ($(UNAME),Darwin)
 	@echo "Updating mise.lock in dotfiles..."
-	MISE_LOCKED=0 mise lock -C "$(MISE_CONFIG_DIR)" || true
+	MISE_LOCKED=0 mise lock -C "$(MISE_CONFIG_DIR)"
 	@echo "mise.lock updated at $(MISE_CONFIG_DIR)/mise.lock"
 	@echo "Next: git add home/files/mise/mise.lock && make build && make apply && mise install"
 else

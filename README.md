@@ -98,6 +98,31 @@ Install tools defined in mise config:
 make mise-install
 ```
 
+### Update Development Tools
+
+Run from the repository root (macOS, Python 3.11+ and mise required):
+
+```bash
+make mise-update                         # preview; does not edit repository files
+make mise-update MISE_UPDATE_ARGS=--write # resolve latest pins and generate lockfile
+git diff -- home/files/mise
+make build
+make apply
+make mise-install
+```
+
+Java stays on the currently configured Temurin major version (currently 25).
+Other tools resolve to the latest version, including major upgrades. To explicitly
+change Java's series, use `MISE_UPDATE_ARGS="--write --java-selector temurin"`
+or specify a series such as `temurin-25`.
+
+The script generates the lockfile in a temporary directory before saving either
+repository file. Resolution or lock-generation failures stop the update. It does
+not install tools, stage files, commit, push, or apply Nix configuration.
+Preview and write each query available versions; the saved exact pins and lockfile
+provide reproducible installation afterward. Commit both files together.
+For manually edited versions, `make mise-update-lock` refreshes just the lockfile.
+
 Verify installation:
 
 ```bash
