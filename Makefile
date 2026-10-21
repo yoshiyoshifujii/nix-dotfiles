@@ -190,7 +190,7 @@ endif
 mise-update-lock:
 ifeq ($(UNAME),Darwin)
 	@echo "Updating mise.lock in dotfiles..."
-	MISE_LOCKED=0 mise lock -C "$(MISE_CONFIG_DIR)"
+	MISE_GLOBAL_CONFIG_FILE="$(MISE_CONFIG_DIR)/config.toml" MISE_LOCKED=0 mise lock --global -C "$(MISE_CONFIG_DIR)"
 	@echo "mise.lock updated at $(MISE_CONFIG_DIR)/mise.lock"
 	@echo "Next: git add home/files/mise/mise.lock && make build && make apply && mise install"
 else
