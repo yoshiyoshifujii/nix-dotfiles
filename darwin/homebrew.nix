@@ -3,7 +3,6 @@
   homebrew = {
     enable = true;
     casks = [
-      "claude-code"
       "1password"
       "1password-cli"
       "alfred"
