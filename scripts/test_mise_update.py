@@ -23,6 +23,14 @@ class PureCoreTest(unittest.TestCase):
         # Then
         self.assertEqual(selector, "java@temurin-25")
 
+    def test_selector_preserves_major_version_for_other_distributions(self):
+        # Given
+        pin = update.ToolPin("java", "zulu-27.30.109.0")
+        # When
+        selector = update.latest_selector(pin)
+        # Then
+        self.assertEqual(selector, "java@zulu-27")
+
     def test_selector_uses_explicit_java_override(self):
         # Given
         pin = update.ToolPin("java", "temurin-25.0.1")

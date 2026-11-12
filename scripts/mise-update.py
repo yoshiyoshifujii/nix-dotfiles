@@ -31,7 +31,7 @@ def parse_pins(config: str) -> tuple[ToolPin, ...]:
 def latest_selector(pin: ToolPin, java_selector: str | None = None) -> str:
     if pin.tool != "java":
         return pin.tool
-    match = re.match(r"(temurin-\d+)\.", pin.version)
+    match = re.match(r"([a-z]+-\d+)\.", pin.version)
     if not java_selector and not match:
         raise ValueError("Specify --java-selector for this Java distribution")
     return "java@" + (java_selector or match[1])
@@ -113,7 +113,7 @@ def update(write=False, java_selector=None):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--write", action="store_true", help="save resolved pins and lockfile")
-    parser.add_argument("--java-selector", help="Java selector, e.g. temurin-25 or temurin")
+    parser.add_argument("--java-selector", help="Java selector, e.g. temurin-25 or zulu-27")
     args = parser.parse_args()
     try:
         update(args.write, args.java_selector)
