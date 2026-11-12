@@ -5,9 +5,9 @@ locked = true
 [tools]
 java = "zulu-27.30.109.0"
 maven = "3.10.0"
-gradle = "9.8.2"
+gradle = "9.9.1"
 rust = "1.99.1"
 python = "3.15.2"
-node = "26.13.0"
-pnpm = "12.16.1"
-go = "1.27.3"
+node = "26.13.1"
+pnpm = "12.18.0"
+go = "1.27.4"
