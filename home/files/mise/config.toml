@@ -4,10 +4,10 @@ locked = true
 
 [tools]
 java = "zulu-27.30.109.0"
-maven = "3.10.0"
+maven = "3.10.1"
 gradle = "9.9.1"
-rust = "1.99.1"
+rust = "1.100.0"
 python = "3.15.2"
 node = "26.13.1"
-pnpm = "12.18.0"
+pnpm = "12.21.0"
 go = "1.27.4"
